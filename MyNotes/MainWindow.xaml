@@ -6,12 +6,11 @@
         xmlns:local="clr-namespace:MyNotes"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="MyNotes.MainWindow"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="684" Width="1294" Background="White">
-
+        Title="MainWindow"  Background="White">
+    <!--Height="684" Width="1294"-->
     <Window.Resources>
 
         <Style TargetType="{x:Type TreeViewItem}">
-
             <Style.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#FFD1D4D7"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#FF404040"/>
@@ -86,28 +85,24 @@
     </Window.CommandBindings>
 
     <Grid>
+        <!--<Grid ShowGridLines="True">-->
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="90"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="170"/>
+            <!--<ColumnDefinition Width="auto"/>-->
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition Width="600"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="100"/>
+            <!--<ColumnDefinition Width="250"/>-->
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.ColumnSpan="9">
+        <DockPanel Grid.ColumnSpan="5">
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
                 <Menu.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -123,24 +118,25 @@
                     <MenuItem Header="_Exit" />
                 </MenuItem>
             </Menu>
-            <TextBox AcceptsReturn="True" />
+            <TextBox AcceptsReturn="True" BorderThickness="0" />
+            <Separator VerticalAlignment="Bottom"  />
         </DockPanel>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="8" FontSize="26" Margin="30,30,1,10" Foreground="#FF6ACD18" FontWeight="Bold" FontFamily="Viner Hand ITC" ><Run Text="My Notes"/></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="26" Margin="30,30,30,10" Foreground="#FF6ACD18" FontWeight="Bold" FontFamily="Viner Hand ITC" ><Run Text="My Notes"/></TextBlock>
 
         <!--1 панелька - Блокноты-->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Margin="0,5,0,0">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="0,0,0,0" Background="#FFEDF3EF">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FFCBE4F1" Offset="0"/>
-                        <GradientStop Color="#FFEAF5F2" Offset="1"/>
+                        <GradientStop Color="#FFC0CECA" Offset="1"/>
                     </LinearGradientBrush>
                 </StackPanel.Background>
                 <Image Stretch="None" Source=".\Images\notebook2_icon.png" />
-                <TextBlock VerticalAlignment="Top" Foreground="#FF53585D" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Блокноты"/></TextBlock>
+                <TextBlock VerticalAlignment="Top" Foreground="#FF53585D" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Записные книжки"/></TextBlock>
             </StackPanel>
-            <TreeView x:Name="trvStructure" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="TreeViewItem_Selected" Margin="2">
+            <TreeView x:Name="trvStructure" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="TreeViewItem_Selected" Margin="2" Background="#FFEDF3EF">
                 <!--<TreeView.Style>
                     <Style TargetType="TreeView">
                         <Setter Property="Background" Value="Bisque"/>
@@ -154,10 +150,10 @@
             </TreeView>
         </StackPanel>
 
-        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" ShowsPreview="False" Width="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FF939699" />
+        <!--<GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFE236D3" />-->
 
         <!--2 панелька - Заметки-->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" Margin="0,5,0,0">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,0,0" Background="#FFF3EBEB">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -168,7 +164,7 @@
                 <Image Stretch="None" Source=".\Images\notebook3_icon.png" />
                 <TextBlock x:Name="NotebookNameTbl" VerticalAlignment="Top" Foreground="#FF1B1C1D" Margin="4" FontSize="14" FontFamily="Segoe UI Light"/>
             </StackPanel>
-            <ListView x:Name="NotesLv" Margin="0" BorderThickness="0" SelectionChanged="NotesLv_SelectionChanged">
+            <ListView x:Name="NotesLv" Margin="0" BorderThickness="0" SelectionChanged="NotesLv_SelectionChanged" Background="#FFF3EBEB">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical" Margin="10,0,0,15">
@@ -183,12 +179,12 @@
             </ListView>
         </StackPanel>
 
-        <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" ShowsPreview="False" Width="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FF939699" />
+        <GridSplitter Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFB4A4B5" />
 
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="4" Margin="6,0,0,0">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Margin="6,0,0,0">
             <!--1-я горизонтальная панель заметок-->
             <DockPanel LastChildFill="False">
-                <TextBlock x:Name="NotePaneltbl1"  Height="20" VerticalAlignment="Center" DockPanel.Dock="Left"  Foreground="#FF1B1C1D" />
+                <TextBlock x:Name="NotePaneltbl1"  Height="20" VerticalAlignment="Center" DockPanel.Dock="Left"  Foreground="#FF1B1C1D"/>
                 <!--<Button x:Name="buttonSave" Margin="0,0,50,0" Width="20" Height="20" BorderThickness="0" DockPanel.Dock="Right" Click="buttonSave_Click">
                     <Button.Background>
                         <ImageBrush ImageSource=".\Images\save.png" />
@@ -197,8 +193,8 @@
             </DockPanel>
             <!--2-я горизонтальная панель заметок-->
             <DockPanel LastChildFill="False">
-                <TextBlock x:Name="NotePaneltbl2" DockPanel.Dock="Left"  Height="20" VerticalAlignment="Center" Foreground="#FF3374D1" />
-                <Image Width="20" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" DockPanel.Dock="Right">
+                <TextBlock x:Name="NotePaneltbl2" DockPanel.Dock="Left"  Height="20" VerticalAlignment="Center" Foreground="#FF3374D1" Margin="0,10,0,0" />
+                <Image Width="20" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" ToolTip="Удалить заметку" DockPanel.Dock="Right">
                     <Image.Source>
                         <BitmapImage>
                             <BitmapImage.UriSource>.\Images\busket2_icon.png</BitmapImage.UriSource>
@@ -216,7 +212,7 @@
                         <ScaleTransform ScaleX="1" ScaleY="1"/>
                     </Image.RenderTransform>
                 </Image>
-                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" DockPanel.Dock="Right">
+                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" ToolTip="Сохранить заметку" DockPanel.Dock="Right">
                     <Image.Source>
                         <BitmapImage>
                             <BitmapImage.UriSource>.\Images\save.png</BitmapImage.UriSource>
@@ -252,7 +248,7 @@
                 <Button Name="buttonColorPick" Content="A"  Width="20" Height="20" Click="buttonColorPick_Click" HorizontalAlignment="Left" Background="#FFACE890"  Margin="5,0,0,0" FontFamily="Tahoma" FontSize="10" Foreground="#FF4F4E4E"/>
                 <!--<Rectangle Name="colorRect" Grid.Row="0" Grid.Column="1" Width="20" Height="20" Stroke="Aqua" Fill="DarkGreen"  StrokeThickness="1"></Rectangle>-->
                 <Popup x:Name="popup1" StaysOpen="False" Placement="Mouse" MaxWidth="180" AllowsTransparency="True"  >
-                    <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,81" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="colorList" SelectionChanged="colorList_SelectionChanged">
+                    <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,81" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="colorList" SelectionChanged="colorList_SelectionChanged" Background="#FFAC9BD4">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
@@ -268,28 +264,39 @@
             </StackPanel>
         </StackPanel>
 
-        <UniformGrid Rows="1" Columns="1" Grid.Row="2" Grid.Column="4" Margin="10,14,10,4">
+        <UniformGrid Rows="1" Columns="1" Grid.Row="2" Grid.Column="3" Margin="10,14,10,4">
             <Border BorderBrush="#FFABABAB" BorderThickness="1">
                 <StackPanel Orientation="Vertical">
-                    <TextBox Name="NoteNameTbx" BorderThickness="0" Margin="6,2"/>
-                    <Separator Margin="6,4"/>
-                    <RichTextBox x:Name="rtb" BorderThickness="0" SelectionChanged="rtb_SelectionChanged" />
+                    <TextBox Name="NoteNameTbx" BorderThickness="1"  FontWeight="Normal" FontSize="16" Height="30" Margin="0,0,0,10" Foreground="#FF424141" VerticalAlignment="Bottom" >
+                        <TextBox.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFDCFBD1" Offset="1"/>
+                                <GradientStop Color="#FFC2FBD8" Offset="0"/>
+                            </LinearGradientBrush>
+                        </TextBox.Background>
+                    </TextBox>
+                    <!--<Separator />-->
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="200">
+                        <RichTextBox x:Name="rtb" BorderThickness="0" SelectionChanged="rtb_SelectionChanged" AcceptsTab="True" AcceptsReturn="True" />
+                    </ScrollViewer>
                 </StackPanel>
             </Border>
         </UniformGrid>
 
-        <RichTextBox x:Name="rtb1" Grid.Row="2" Grid.Column="5" Margin="4,4,4,4" BorderBrush="#FF404244" BorderThickness="1" Width="200" Background="#FFDFF075">
-        </RichTextBox>
+        <!--<RichTextBox x:Name="rtb1" Grid.Row="2" Grid.Column="5"  Height="200" Margin="4,4,4,4" BorderBrush="#FF404244" BorderThickness="1" Width="200" Background="#FFDFF075">
+        </RichTextBox>-->
+
+
         <!--<TextBox AcceptsReturn="True" Name="txtEditor" Grid.Row="2" />-->
-        <WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.Column="6" OpacityMask="#FFA8CFA1" />
+        <!--<WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.Column="6" OpacityMask="#FFA8CFA1" />-->
 
-        <Button x:Name="buttonOpenFile0" Width="70" Height="20" Grid.Row="6" Grid.Column="4" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
-        <Button x:Name="buttonOpenNotebooks" Height="20" Grid.Row="6" Grid.Column="5" Content="Открыть блокноты" Click="buttonOpenNotebooks_Click" Margin="36,0,26,0" VerticalAlignment="Center"  />
+        <Button x:Name="buttonOpenFile0" ToolTip="Всплывающая подсказка для кнопки" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
+        <Button x:Name="buttonOpenNotebooks" Height="20" Grid.Row="4" Grid.Column="4" Width="120" Content="Открыть блокноты" Click="buttonOpenNotebooks_Click" Margin="10,0,10,0" VerticalAlignment="Center"  />
 
-        <DockPanel Grid.Row="6" Grid.Column="4">
+        <DockPanel Grid.Row="6" Grid.Column="3">
             <WrapPanel DockPanel.Dock="Top" Margin="3" Height="27" RenderTransformOrigin="0.498,1.148" >
-                <Button Command="ApplicationCommands.Cut" Width="60" Content="_Cut"/>
-                <Button Command="ApplicationCommands.Paste" Width="60" Margin="3,0" Content="_Paste"/>
+                <Button Command="ApplicationCommands.Cut" ToolTip="Удалить строки или картинки" Width="60" Content="_Cut"/>
+                <Button Command="ApplicationCommands.Paste" ToolTip="Вставить из буфера текст или картинку" Width="60" Margin="3,0" Content="_Paste"/>
             </WrapPanel>
 
         </DockPanel>

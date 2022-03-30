@@ -38,6 +38,7 @@ namespace MyNotes
 
 
             //--- корневая папка
+            //-- 2022 берем корневую папку поумолчанию. Получаем дерево вложенных директорий
             trvStructure.BorderThickness = new Thickness(0);
             //trvStructure.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));  // transparent
             System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\test");
@@ -74,15 +75,10 @@ namespace MyNotes
 
         public static string NotePath = "";
 
-//В хорошо спроектированном Windows-приложении прикладная логика находится не в обработчиках событий, а закодирована в высокоуровневых методах. 
-//Каждый из этих методов представляет одну решаемую приложением "задачу". 
-//Каждая задача может полагаться на дополнительные библиотеки (вроде отдельно компилируемых компонентов, в которых инкапсулируется бизнес-логика или доступ к базам данных)
 
-       
-
-//Вообщем помучился еще немного, вы правы смотря откуда копируешь. 
-//    Пока что самый подходящий вариант брать из буфера как html и там в заголовке будет ссылка на источник 
-//        и байты с какого по какой скопировано (грубо говоря, да и то не все браузеры передают) и самому уже загружать то, что надо.
+        //Вообщем помучился еще немного, вы правы смотря откуда копируешь. 
+        //    Пока что самый подходящий вариант брать из буфера как html и там в заголовке будет ссылка на источник 
+        //        и байты с какого по какой скопировано (грубо говоря, да и то не все браузеры передают) и самому уже загружать то, что надо.
 
         //private void Button_Click(object sender, RoutedEventArgs e)
         //{
@@ -107,61 +103,66 @@ namespace MyNotes
             e.CanExecute = Clipboard.ContainsText() || Clipboard.ContainsImage();
         }
 
+        //-- 2022 вставка из буфера. Можно вставить текст, можно картинку
+        //-- 2022 метод реализован для того, чтобы в дальнейшем расширить вставку ctrl+v и удаление Dell
+        //-- сейчас, как для ctrl+v можно вставить или текст или картинку. Если в буфере и текст и картинка вставляется только текст
         private void PasteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            //rtb.Paste();
+            //-- Вставка в rtb
+            rtb.Paste();
+            //-- Вставка в rtb1
+            //rtb1.Paste();
+
+            //-- расширение метода на будущее. не готово ==========================
+            /*
             string text = "";
             BitmapSource imgText = null;
-
+            
+            //-- текст из буфера
             text = Clipboard.GetText();
-
-            if (Clipboard.ContainsText(TextDataFormat.Html))
-            {
-               // text = Clipboard.GetText(TextDataFormat.Html);
-            }
-            else if (Clipboard.ContainsText(TextDataFormat.Rtf))
-            {
-                text = Clipboard.GetText(TextDataFormat.Rtf);
-            }
+            //-- для разных форматов --
+            //if (Clipboard.ContainsText(TextDataFormat.Html))
+            //{
+            //    text = Clipboard.GetText(TextDataFormat.Html);
+            //}
+            //else if (Clipboard.ContainsText(TextDataFormat.Rtf))
+            //{
+            //    text = Clipboard.GetText(TextDataFormat.Rtf);
+            //}
             //else if (Clipboard.ContainsText(TextDataFormat.Text))
             //{
             //    text = Clipboard.GetText(TextDataFormat.Text);
             //}
 
+            //-- картинка из буфера
             if (Clipboard.ContainsImage())
             {
                 imgText = Clipboard.GetImage();
             }
 
-            //text = "<HTML><BODY><H1>Welcome</H1><CENTER><H2>Overview<H2></CENTER><P>Be sure to <B>Refresh</B> this page.</P></BODY></HTML>";
-
-            //TextSelection ts = rtb.Selection;
             TextRange textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
             //if (textRange.CanLoad(DataFormats.Rtf))
             //{
-           //textRange.Load(new MemoryStream(Encoding.Default.GetBytes(text)), DataFormats.Rtf);
+            //textRange.Load(new MemoryStream(Encoding.Default.GetBytes(text)), DataFormats.Rtf);
             //textRange.Load(new MemoryStream(Encoding.Default.GetBytes(text)), DataFormats.Html);
-                //SetDefaultFontColor(textRange);
+            //SetDefaultFontColor(textRange);
             //}
 
-           //textRange.Load(imgText, DataFormats.Bitmap);
-           //textRange.Load(new MemoryStream();
+            //textRange.Load(imgText, DataFormats.Bitmap);
+            //textRange.Load(new MemoryStream();
 
-           byte[] bytes;
-
-           //bytes = GetImageByteArray(imgText);
-          // textRange.Save(new MemoryStream(bytes), DataFormats.Rtf);
-           //I see that if I paste an image into the RichTextBox control and save that control's contents using the TextRange, it does indeed save the image.
+            //byte[] bytes;
+            //bytes = GetImageByteArray(imgText);
+            // textRange.Save(new MemoryStream(bytes), DataFormats.Rtf);
+            //I see that if I paste an image into the RichTextBox control and save that control's contents using the TextRange, it does indeed save the image.
 
             //DataFormats.Format format = DataFormats.GetFormat(DataFormats.Bitmap);
             //rtb.Paste(format);
+            // в TextRange может быть только текст. если выделить текст с картинкой, то в TextRange только текст
 
-
-           // Судя по всему в TextRange может быть только текст. если выделить текст с картинкой, то в TextRange только текст
-
-            rtb.AppendText(text); //-- ставляется только текст без картинки
-           // rtb.SetValue()
-           //rtb.Paste();
+            //rtb.AppendText(text); //-- вставляется только текст без картинки
+            // rtb.SetValue()
+            //rtb.Paste();
 
             //---------------------------
             //Image image = new Image();
@@ -172,36 +173,27 @@ namespace MyNotes
             //floater.HorizontalAlignment = HorizontalAlignment.Center;
             //floater.Width = image.Width;
             //-------------------------------------
-
-            /*          
-           Элемент Floater можно применять и для вывода рисунков. Но, как ни странно, не существует элемента вывода потокового содержимого, предназначенного для этой задачи. Поэтому элемент Image придется применять вместе с элементом BlockUIContainer или InlineUIContainer.
-
-           Здесь есть один опасный момент. При вставке плавающего окошка, заключающего в себе изображение, потоковый документ предполагает, что рисунок должен быть по ширине таким же, как и вся колонка текста. Размер находящегося внутри элемента Image будет изменен, что может привести к возникновению проблем, если придется сильно уменьшить или увеличить растровое изображение.
-
-           С помощью свойства Image.Stretch можно запретить изменение размеров изображения, хотя в этом случае плавающее окошко все равно займет всю колонку по ширине — просто вокруг рисунка останутся пустые места. Единственным подходящим решением при внедрении растрового изображения в потоковый документ является указание фиксированных размеров плавающего окошка. После этого с помощью свойства Image.Stretch можно определить, как будет меняться размер изображения в этом окошке.
-           http://professorweb.ru/my/WPF/documents_WPF/level28/28_4.php
-           */
-
+                     
+           //Элемент Floater можно применять и для вывода рисунков. Но, как ни странно, не существует элемента вывода потокового содержимого, предназначенного для этой задачи. Поэтому элемент Image придется применять вместе с элементом BlockUIContainer или InlineUIContainer.
+           //Здесь есть один опасный момент. При вставке плавающего окошка, заключающего в себе изображение, потоковый документ предполагает, что рисунок должен быть по ширине таким же, как и вся колонка текста. Размер находящегося внутри элемента Image будет изменен, что может привести к возникновению проблем, если придется сильно уменьшить или увеличить растровое изображение.
+           //С помощью свойства Image.Stretch можно запретить изменение размеров изображения, хотя в этом случае плавающее окошко все равно займет всю колонку по ширине — просто вокруг рисунка останутся пустые места. Единственным подходящим решением при внедрении растрового изображения в потоковый документ является указание фиксированных размеров плавающего окошка. После этого с помощью свойства Image.Stretch можно определить, как будет меняться размер изображения в этом окошке.
+           
             //rtb.Paste(DataFormats.Bitmap);
             //HtmlToXamlConverter
           // myWebBrowser.DataContext 
             //txtEditor.AppendText(text);
 
             //-- Вставка в rtb1
-            rtb1.Paste();
+            //rtb1.Paste();
 
             //-- Вставка в браузер
             //myWebBrowser.NavigateToString(text);
-
-
            // ImageFromClipboardDib();
-
 
             //MemoryStream ms = Clipboard.GetDataObject() as MemoryStream;
             //if (ms != null) {
             //    byte[] dibBuffer = new byte[ms.Length];
             //    ms.Read(dibBuffer, 0, dibBuffer.Length);
-
             //}
 
 
@@ -209,50 +201,53 @@ namespace MyNotes
             //http://stackoverflow.com/questions/8442085/receiving-an-image-dragged-from-web-page-to-wpf-window
 
             //--- TEST
-            DataObject retrievedData1 = (DataObject)Clipboard.GetDataObject();
-            if (retrievedData1.GetDataPresent(typeof(BitmapSource)))
-            {
-                BitmapSource bs1 = retrievedData1.GetData(typeof(BitmapSource)) as BitmapSource;
-            }
+            //DataObject retrievedData1 = (DataObject)Clipboard.GetDataObject();
+            //if (retrievedData1.GetDataPresent(typeof(BitmapSource)))
+            //{
+            //    BitmapSource bs1 = retrievedData1.GetData(typeof(BitmapSource)) as BitmapSource;
+            //}
             
-            if (retrievedData1.GetDataPresent(typeof(string)))
-            {
-                string ss1 = retrievedData1.GetData(typeof(string)) as string;
-            }
+            //if (retrievedData1.GetDataPresent(typeof(string)))
+            //{
+            //    //-- 2022 из буфера тоже....
+            //    string ss1 = retrievedData1.GetData(typeof(string)) as string;
+            //}
 
 
             //------------------------------------------
             // data to the Clipboard in multiple formats.
-            DataObject data = new DataObject();
+            //DataObject data = new DataObject();
 
             // Add a Customer object using the type as the format.
-            data.SetData(new Customer("Customer as Customer object"));
+            //data.SetData(new Customer("Customer as Customer object"));
 
-            data.SetImage(imgText);
+            //if(imgText != null)
+            //    data.SetImage(imgText);
 
-            data.SetText("jdjgdgdgdg",TextDataFormat.Text);
+            //data.SetText("jdjgdgdgdg",TextDataFormat.Text);
 
-            Clipboard.SetDataObject(data);
-            DataObject retrievedData = (DataObject)Clipboard.GetDataObject();
+            //Clipboard.SetDataObject(data);
+            //DataObject retrievedData = (DataObject)Clipboard.GetDataObject();
 
-            if (retrievedData.GetDataPresent(typeof(Customer)))
-            {
-                Customer customer =
-                    retrievedData.GetData(typeof(Customer)) as Customer;
-                if (customer != null)
-                {
-                    MessageBox.Show(customer.Name);
-                }
-            }
-            if (retrievedData.GetDataPresent(typeof(BitmapSource)))
-            {
-                BitmapSource bs = retrievedData.GetData(typeof(BitmapSource)) as BitmapSource;
-            }
-            if (retrievedData.GetDataPresent(typeof(string)))
-            {
-                string ss = retrievedData.GetData(typeof(string)) as string;
-            }
-
+            //if (retrievedData.GetDataPresent(typeof(Customer)))
+            //{
+            //    Customer customer =
+            //        retrievedData.GetData(typeof(Customer)) as Customer;
+            //    if (customer != null)
+            //    {
+            //        // во время отладки зависает из-за этого
+            //        //MessageBox.Show(customer.Name);
+            //    }
+            //}
+            //if (retrievedData.GetDataPresent(typeof(BitmapSource)))
+            //{
+            //    BitmapSource bs = retrievedData.GetData(typeof(BitmapSource)) as BitmapSource;
+            //}
+            //if (retrievedData.GetDataPresent(typeof(string)))
+            //{
+            //    string ss = retrievedData.GetData(typeof(string)) as string;
+            //}
+            */
         }
 
 
@@ -518,7 +513,7 @@ namespace MyNotes
 
 
 
-
+        //-- для кнопки "Открыть"
         private void buttonOpenFile0_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -604,7 +599,8 @@ namespace MyNotes
         }
 
         
-
+        //--кнопка "Открыть блокноты"
+        //-- в итоге ничего не делает. что я хотела делать?
         private void OpenNotebooks()
         {
             //OpenFileDialog ofd = new OpenFileDialog();
@@ -637,7 +633,7 @@ namespace MyNotes
 
         }
 
-
+        //-- для кнопки "Открыть блокноты"
         static void WalkDirectoryTree(System.IO.DirectoryInfo root)
         {
             System.IO.FileInfo[] files = null;
@@ -694,11 +690,15 @@ namespace MyNotes
             }
         }
 
+        //-- нажатие кнопки "Открыть блокноты"
         private void buttonOpenNotebooks_Click(object sender, RoutedEventArgs e)
         {
             OpenNotebooks();
         }
 
+        //--2022 ДЛЯ ХОЖДЕНИЯ ПО ПАПКАМ И ВЫВОДА
+        //--2022 раскрытие дерева блокнотов(директорий)
+        //-- 2022 блокнот должен быть открыт у выбранной записной книжки(dir)
         private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
         {
             TreeViewItem item = e.Source as TreeViewItem;
@@ -726,9 +726,13 @@ namespace MyNotes
             }
         }
 
+        //--2022 ДЛЯ ХОЖДЕНИЯ ПО ПАПКАМ И ВЫВОДА
+        //-- 2022 на входе имя записной книжки-директории и заметок-файлов в этой директории(записной книжке)
+        //--2022 записываем в список List<Item> items все заметки из выбранной запиской книжки(dir) и выбираем первую для отображения
         private void fillNotes(System.IO.FileInfo[] files, string notebookName)
         {
             List<Item> items = new List<Item>();
+            //--обход всех заметок-файлов в папке
             foreach (System.IO.FileInfo file in files)
             {
                 //items.Add(new Item() { Name = file.ToString(), Type = file.Name });
@@ -767,12 +771,15 @@ namespace MyNotes
             //-- задаем название блокнота
             NotebookNameTbl.Text = notebookName;
             //-- название блокнота в заметке
-            NotePaneltbl1.Text = notebookName;
+            //NotePaneltbl1.Text = notebookName;
+            NotePaneltbl1.Text = "Записная книжка: " + notebookName;
         }
 
+        //--2022 ДЛЯ ХОЖДЕНИЯ ПО ПАПКАМ И ВЫВОДА
+        //--2022 возвращает дерево всех вложенных директорий TreeViewItem item
         private TreeViewItem CreateTreeItem(object o)
         {
-            //--Есть ли вложенные папки
+            //--Есть ли вложенные папки 
             bool isStack = false;
             if (o is DirectoryInfo)
                 if ((o as DirectoryInfo).GetDirectories().Length > 0)
@@ -781,6 +788,7 @@ namespace MyNotes
             TreeViewItem item = new TreeViewItem();
             StackPanel stp = new StackPanel();
             
+            //-- 2022 назначаем иконку "папка с вложенными папками" или "блокнот"
             Image img = new Image();
             if (isStack)
                 img.Source = new BitmapImage(new Uri(@".\Images\stack.png", UriKind.Relative));
@@ -788,6 +796,7 @@ namespace MyNotes
                 img.Source = new BitmapImage(new Uri(@".\Images\notebook2_icon.png", UriKind.Relative));
             img.Stretch = Stretch.None;
 
+            //-- вложенная папка
             TextBlock tbx = new TextBlock();
             tbx.Margin = new Thickness(5, 0, 0, 0);
             tbx.Text = o.ToString();
@@ -806,6 +815,7 @@ namespace MyNotes
             return item;
         }
 
+        //--2022 ДЛЯ ХОЖДЕНИЯ ПО ПАПКАМ И ВЫВОДА
         private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
         {
             DirectoryInfo selectedDir = null;
@@ -816,6 +826,7 @@ namespace MyNotes
                 fillNotes(selectedDir.GetFiles("*.*"), selectedDir.Name);
         }
 
+        //-- 2022 вывод заметки на экран
         private void NotesLv_SelectionChanged(object sender, RoutedEventArgs e)
         {
             Item item = ((sender as ListView).SelectedItem as Item);
@@ -857,17 +868,20 @@ namespace MyNotes
         {
             EditNote.Visibility = Visibility.Visible;
 
-            object temp = rtb.Selection.GetPropertyValue(Inline.FontWeightProperty);
-            btnBold.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontWeights.Bold));
-            temp = rtb.Selection.GetPropertyValue(Inline.FontStyleProperty);
-            btnItalic.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontStyles.Italic));
-            temp = rtb.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-            btnUnderline.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(TextDecorations.Underline));
+            if (rtb.Selection != null && rtb.Selection.Text.Trim().Length > 0)
+            {
+                object temp = rtb.Selection.GetPropertyValue(Inline.FontWeightProperty);
+                btnBold.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontWeights.Bold));
+                temp = rtb.Selection.GetPropertyValue(Inline.FontStyleProperty);
+                btnItalic.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(FontStyles.Italic));
+                temp = rtb.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
+                btnUnderline.IsChecked = (temp != DependencyProperty.UnsetValue) && (temp.Equals(TextDecorations.Underline));
 
-            temp = rtb.Selection.GetPropertyValue(Inline.FontFamilyProperty);
-            cmbFontFamily.SelectedItem = temp;
-            temp = rtb.Selection.GetPropertyValue(Inline.FontSizeProperty);
-            cmbFontSize.Text = temp.ToString();
+                temp = rtb.Selection.GetPropertyValue(Inline.FontFamilyProperty);
+                cmbFontFamily.SelectedItem = temp;
+                temp = rtb.Selection.GetPropertyValue(Inline.FontSizeProperty);
+                cmbFontSize.Text = temp.ToString();
+            }
         }
 
         private void cmbFontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -878,7 +892,13 @@ namespace MyNotes
 
         private void cmbFontSize_TextChanged(object sender, TextChangedEventArgs e)
         {
-            rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cmbFontSize.Text);
+            try
+            {
+                rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cmbFontSize.Text);
+            }
+            catch (Exception ex) {
+                rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, 12);
+            }
         }
 
         private void buttonColorPick_Click(object sender, RoutedEventArgs e)
@@ -912,6 +932,9 @@ namespace MyNotes
 
         #endregion
 
+        //-- 2022 сохранение заметки
+        //-- 2022 сохраняет в RTF но потом открывает белиберду
+        //-- добавить подсказку при наведении мыши и вообще как-то выделить окно редактирования заметки
         private void ImgSave_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             //--переименование
@@ -997,6 +1020,7 @@ namespace MyNotes
     }
 
 
+    //-- 2022 заметка-файл
     public class Item
     {
         public string Type { get; set; }
