@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+//using System.Text;
+//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
+//using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+//using System.Windows.Navigation;
+//using System.Windows.Shapes;
 using System.IO;
 using System.Collections;
 using Microsoft.Win32;
-using System.Globalization;
+//using System.Globalization;
+//using System.Windows.Forms; // для FolderBrowserDialog
+
+
 
 namespace MyNotes
 {
@@ -27,52 +30,149 @@ namespace MyNotes
         public MainWindow()
         {
             InitializeComponent();
-            //list.ItemsSource = (IEnumerable)list.Resources["array"];
 
-            //----
-            //--Непосредственное добавление с помощью ListView.Items.Add() сработало бы в том случае, если бы не было привязки к свойству ItemsSource. В нашем же случае надо добавить новый элемент не напрямую в ListView, а в коллекцию, к которой идет привязка, а затем уже обновить ListView.
-            //Team makedonia = new Team() { Country = "Македония", Place = 5, Score = 8 };
-            //приведение ресурса teams к типу ArrayList
-           // ((ArrayList)lview.Resources["teams"]).Add(makedonia);
-            //lview.Items.Refresh();
+            // Открыть папку с Записными книжками
+            string folderName  = ChooseNotebookFolder();
 
-
-            //--- корневая папка
-            //-- 2022 берем корневую папку поумолчанию. Получаем дерево вложенных директорий
             trvStructure.BorderThickness = new Thickness(0);
-            //trvStructure.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));  // transparent
-            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\NoteBook");
+            //System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\NoteBook");
+            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo(folderName);
             System.IO.DirectoryInfo[] subDirs = rootDir.GetDirectories();
             foreach (System.IO.DirectoryInfo dirInfo in subDirs)
             {
-                //trvStructure.Items.Add(CreateTreeItem(dirInfo));
                 trvStructure.Items.Add(ParseNotes.CreateTreeItem(dirInfo));
             }
             ((TreeViewItem)trvStructure.Items[0]).IsSelected = true;
-
-            //trvStructure.ItemContainerStyle.Resources.Add(Margin, 20);
-
-            //-- или всетаки получать всю структуру папок полностью сразу?
-            //-- http://professorweb.ru/my/ASP_NET/sites/level2/2_5.php
-            
-
-            //--- заполнение заметок
-            //List<Item> items = new List<Item>();
-            //items.Add(new Item() { Name = "John Doe", Type = "fg" });
-            //items.Add(new Item() { Name = "Jane Doe", Type = "fg" });
-            //items.Add(new Item() { Name = "Sammy Doe", Type = "fg" });
-            //NotesLv.ItemsSource = items;
-
+                  
             //-- для редактирования текста заметки
             cmbFontFamily.ItemsSource = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
             cmbFontSize.ItemsSource = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72 };
-
 
             this.colorList.ItemsSource = typeof(Brushes).GetProperties();
         }
 
 
         public static string NotePath = "";
+
+
+        // Открыть папку с Записными книжками
+        private string ChooseNotebookFolder()
+        {
+            string folderName = null;
+
+            System.Windows.Forms.FolderBrowserDialog folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowser.Description = "Select the directory that you want to use as NoteBook.";
+
+            System.Windows.Forms.DialogResult result = folderBrowser.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                folderName = folderBrowser.SelectedPath;
+            }
+
+            return folderName;
+        }
+
+
+        //-- нажатие кнопки "Открыть блокноты"
+        private void buttonOpenNotebooks_Click(object sender, RoutedEventArgs e)
+        {
+            OpenNotebooks();
+        }
+
+
+        //--кнопка "Открыть блокноты"
+        //-- в итоге ничего не делает. что я хотела делать?
+        private void OpenNotebooks()
+        {
+            //OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
+
+            //string fileName = null;
+            //if (ofd.ShowDialog() == true)
+            //{
+            //    fileName = ofd.FileName;
+            //}
+
+            string dir1 = System.IO.Path.GetDirectoryName("C:\\Users\\Sveta\\Desktop\\NoteBook");
+            System.IO.Path.GetFileName("C:\\Users\\Sveta\\Desktop\\NoteBook");
+
+            //var dir = new System.IO.DirectoryInfo(dir + @"\Шаблоны\" + spg + @"\");
+            var dir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\NoteBook");
+            //var files = dir.GetFiles("*.*");
+            FileInfo[] files = dir.GetFiles("*.*");
+
+
+            //var root = dir;
+            //DirectoryInfo[] di = root.GetDirectories("*.*", System.IO.SearchOption.AllDirectories);
+
+            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\NoteBook");
+            WalkDirectoryTree(rootDir);
+
+            //list1.Items.Clear();
+            //list1.ItemsSource = files;
+            //list1.DisplayMemberPath = "Name";
+
+        }
+
+        //-- для кнопки "Открыть блокноты"
+        static void WalkDirectoryTree(System.IO.DirectoryInfo root)
+        {
+            System.IO.FileInfo[] files = null;
+            System.IO.DirectoryInfo[] subDirs = null;
+
+
+            ArrayList listItems = new ArrayList(); //---?????
+
+
+            // First, process all the files directly under this folder 
+            try
+            {
+                files = root.GetFiles("*.*");
+            }
+            // This is thrown if even one of the files requires permissions greater 
+            // than the application provides. 
+            catch (UnauthorizedAccessException e)
+            {
+                // This code just writes out the message and continues to recurse. 
+                // You may decide to do something different here. For example, you 
+                // can try to elevate your privileges and access the file again.
+                //log.Add(e.Message);
+            }
+
+            catch (System.IO.DirectoryNotFoundException e)
+            {
+                //Console.WriteLine(e.Message);
+            }
+
+            if (files != null)
+            {
+                Item itm = null;
+                foreach (System.IO.FileInfo fi in files)
+                {
+                    // In this example, we only access the existing FileInfo object. If we 
+                    // want to open, delete or modify the file, then 
+                    // a try-catch block is required here to handle the case 
+                    // where the file has been deleted since the call to TraverseTree().
+                    //Console.WriteLine(fi.FullName);
+                    itm = new Item();
+                    itm.Name = fi.FullName;
+                    itm.Type = "note";
+                    listItems.Add(itm);
+                }
+
+                // Now find all the subdirectories under this directory.
+                subDirs = root.GetDirectories();
+
+                foreach (System.IO.DirectoryInfo dirInfo in subDirs)
+                {
+                    // Resursive call for each subdirectory.
+                    WalkDirectoryTree(dirInfo);
+                }
+            }
+        }
+
+
 
 
         #region Операции с деревом директорий (Записных книжек)
@@ -160,6 +260,13 @@ namespace MyNotes
         }
 
         #endregion
+
+
+
+
+
+
+
 
 
         #region сохранить/удалить заметку
@@ -435,9 +542,6 @@ namespace MyNotes
 
 
 
-
-
-
         [Serializable]
         public class Customer
         {
@@ -672,31 +776,7 @@ namespace MyNotes
         //}
 
 
-        //private void buttonSave_Click(object sender, RoutedEventArgs e)
-        //{
-        //    //SaveFileDialog sfd = new SaveFileDialog();
-        //    //sfd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
-        //    //if (sfd.ShowDialog() == true)
-        //    //{
-        //        TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-        //        //using (FileStream fs = File.Create(sfd.FileName))
-        //        using (FileStream fs = File.Create(NotePath))
-        //        {
-        //            if (System.IO.Path.GetExtension(NotePath).ToLower() == ".rtf")
-        //            {
-        //                doc.Save(fs, DataFormats.Rtf);
-        //            }
-        //            else if (System.IO.Path.GetExtension(NotePath).ToLower() == ".txt")
-        //            {
-        //                doc.Save(fs, DataFormats.Text);
-        //            }
-        //            else
-        //            {
-        //                doc.Save(fs, DataFormats.Xaml);
-        //            }
-        //        }
-        //    //}
-        //}
+       
 
 
 
@@ -706,102 +786,7 @@ namespace MyNotes
 
 
 
-        //--кнопка "Открыть блокноты"
-        //-- в итоге ничего не делает. что я хотела делать?
-        private void OpenNotebooks()
-        {
-            //OpenFileDialog ofd = new OpenFileDialog();
-            //ofd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
 
-            //string fileName = null;
-            //if (ofd.ShowDialog() == true)
-            //{
-            //    fileName = ofd.FileName;
-            //}
-
-            string dir1 = System.IO.Path.GetDirectoryName("C:\\Users\\Sveta\\Desktop\\test");
-            System.IO.Path.GetFileName("C:\\Users\\Sveta\\Desktop\\test");
-
-            //var dir = new System.IO.DirectoryInfo(dir + @"\Шаблоны\" + spg + @"\");
-            var dir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\test");
-            //var files = dir.GetFiles("*.*");
-            FileInfo[] files = dir.GetFiles("*.*");
-
-
-            //var root = dir;
-            //DirectoryInfo[] di = root.GetDirectories("*.*", System.IO.SearchOption.AllDirectories);
-
-            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\test");
-            WalkDirectoryTree(rootDir);
-
-            //list1.Items.Clear();
-            //list1.ItemsSource = files;
-            //list1.DisplayMemberPath = "Name";
-
-        }
-
-        //-- для кнопки "Открыть блокноты"
-        static void WalkDirectoryTree(System.IO.DirectoryInfo root)
-        {
-            System.IO.FileInfo[] files = null;
-            System.IO.DirectoryInfo[] subDirs = null;
-
-
-            ArrayList listItems = new ArrayList(); //---?????
-
-
-            // First, process all the files directly under this folder 
-            try
-            {
-                files = root.GetFiles("*.*");
-            }
-            // This is thrown if even one of the files requires permissions greater 
-            // than the application provides. 
-            catch (UnauthorizedAccessException e)
-            {
-                // This code just writes out the message and continues to recurse. 
-                // You may decide to do something different here. For example, you 
-                // can try to elevate your privileges and access the file again.
-                //log.Add(e.Message);
-            }
-
-            catch (System.IO.DirectoryNotFoundException e)
-            {
-                //Console.WriteLine(e.Message);
-            }
-
-            if (files != null)
-            {
-                Item itm = null;
-                foreach (System.IO.FileInfo fi in files)
-                {
-                    // In this example, we only access the existing FileInfo object. If we 
-                    // want to open, delete or modify the file, then 
-                    // a try-catch block is required here to handle the case 
-                    // where the file has been deleted since the call to TraverseTree().
-                    //Console.WriteLine(fi.FullName);
-                    itm = new Item();
-                    itm.Name = fi.FullName;
-                    itm.Type = "note";
-                    listItems.Add(itm);
-                }
-
-                // Now find all the subdirectories under this directory.
-                subDirs = root.GetDirectories();
-
-                foreach (System.IO.DirectoryInfo dirInfo in subDirs)
-                {
-                    // Resursive call for each subdirectory.
-                    WalkDirectoryTree(dirInfo);
-                }
-            }
-        }
-
-        //-- нажатие кнопки "Открыть блокноты"
-        private void buttonOpenNotebooks_Click(object sender, RoutedEventArgs e)
-        {
-            OpenNotebooks();
-        }
 
    
 

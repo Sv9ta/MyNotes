@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyNotes"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="MyNotes.MainWindow"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow"  Background="#FFFBF6F2">
+        Title="MainWindow" SizeToContent="WidthAndHeight"  Background="#FFFBF6F2">
     <!--Height="684" Width="1294"-->
     <Window.Resources>
 
