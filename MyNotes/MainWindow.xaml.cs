@@ -170,17 +170,40 @@ namespace MyNotes
             NotesLv.Items.Refresh();
         }
 
+
         //-- Иконка "удалить заметку"
         private void ImgDell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //NotesLv.SelectedItem
-            //NotesLv.ItemsSource
-            //e.Source
-            //DirectoryInfo selectedDir = null;
-            //TreeViewItem item = e.Source as TreeViewItem;
-            //if (item.Tag is DirectoryInfo)
-            //    selectedDir = (item.Tag as DirectoryInfo);
-            //NodePath
+            // диалоговое окно для подтверждения удаления
+            DeleteNoteWindow deleteNoteWindow = new DeleteNoteWindow();
+
+            if (deleteNoteWindow.ShowDialog() == true)
+            {
+                File.Delete(NotePath);
+
+                // Обновить ----------
+                int a = NotePath.LastIndexOf("\\") + 1;
+                int b = NotePath.LastIndexOf(".");
+                string dellNoteName = NotePath.Substring(a, b-a);
+
+                List <Item> items = (List<Item>)NotesLv.ItemsSource;
+                Item itm = new Item();
+                foreach (Item item in items)
+                {
+                    if (item.Name.Equals(dellNoteName))
+                    {
+                        itm = item;
+                        break;
+                    }
+                }
+           
+                int ind = items.IndexOf(itm);
+                items.RemoveAt(ind);
+
+                NotesLv.Items.Refresh();
+                //--выделяем первую заметку
+                NotesLv.SelectedIndex = 0;
+            }
         }
 
 
