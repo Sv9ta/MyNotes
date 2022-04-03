@@ -293,7 +293,7 @@
         <!--<TextBox AcceptsReturn="True" Name="txtEditor" Grid.Row="2" />-->
         <!--<WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.Column="6" OpacityMask="#FFA8CFA1" />-->
 
-        <Button x:Name="buttonOpenFile0" ToolTip="Всплывающая подсказка для кнопки" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
+        <Button x:Name="buttonOpenFile0" ToolTip="открыть содержимое файла в эту заметку" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
         <Button x:Name="buttonOpenNotebooks" Height="20" Grid.Row="4" Grid.Column="4" Width="120" Content="Открыть блокноты" Click="buttonOpenNotebooks_Click" Margin="10,0,10,0" VerticalAlignment="Center"  />
 
         <DockPanel Grid.Row="6" Grid.Column="3">

@@ -161,7 +161,9 @@ namespace MyNotes
 
         #endregion
 
-        
+
+        #region сохранить/удалить заметку
+
         //-- Иконка "сохранить заметку"
         private void ImgSave_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -179,74 +181,65 @@ namespace MyNotes
 
             if (deleteNoteWindow.ShowDialog() == true)
             {
-                File.Delete(NotePath);
-
-                // Обновить ----------
-                int a = NotePath.LastIndexOf("\\") + 1;
-                int b = NotePath.LastIndexOf(".");
-                string dellNoteName = NotePath.Substring(a, b-a);
-
-                List <Item> items = (List<Item>)NotesLv.ItemsSource;
-                Item itm = new Item();
-                foreach (Item item in items)
+                try
                 {
-                    if (item.Name.Equals(dellNoteName))
-                    {
-                        itm = item;
-                        break;
-                    }
-                }
-           
-                int ind = items.IndexOf(itm);
-                items.RemoveAt(ind);
+                    File.Delete(NotePath);
 
-                NotesLv.Items.Refresh();
-                //--выделяем первую заметку
-                NotesLv.SelectedIndex = 0;
+                    // Обновить ----------
+                    int a = NotePath.LastIndexOf("\\") + 1;
+                    int b = NotePath.LastIndexOf(".");
+                    string dellNoteName = NotePath.Substring(a, b - a);
+
+                    List<Item> items = (List<Item>)NotesLv.ItemsSource;
+                    Item itm = new Item();
+                    foreach (Item item in items)
+                    {
+                        if (item.Name.Equals(dellNoteName))
+                        {
+                            itm = item;
+                            break;
+                        }
+                    }
+
+                    int ind = items.IndexOf(itm);
+                    items.RemoveAt(ind);
+
+                    NotesLv.Items.Refresh();
+                    //--выделяем первую заметку
+                    NotesLv.SelectedIndex = 0;
+                }
+                catch (Exception ex) { }
             }
         }
 
+        #endregion
 
-
-
-
-        //Вообщем помучился еще немного, вы правы смотря откуда копируешь. 
-        //    Пока что самый подходящий вариант брать из буфера как html и там в заголовке будет ссылка на источник 
-        //        и байты с какого по какой скопировано (грубо говоря, да и то не все браузеры передают) и самому уже загружать то, что надо.
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    string[] countries = { "Россия", "Португалия", "Израиль", "Азербайджан", "Сев. Ирландия", "Люксембург" };
-        //    list.ItemsSource = countries;
-        //} 
-
+        #region Cut/Paste
 
         private void CutCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             //e.CanExecute = (rtb != null) && (rtb.Selection > 0);
             e.CanExecute = (rtb != null);
         }
-
         private void CutCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             rtb.Cut();
         }
+
 
         private void PasteCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = Clipboard.ContainsText() || Clipboard.ContainsImage();
         }
 
-        //-- 2022 вставка из буфера. Можно вставить текст, можно картинку
-        //-- 2022 метод реализован для того, чтобы в дальнейшем расширить вставку ctrl+v и удаление Dell
+        //-- вставка из буфера. Можно вставить текст, можно картинку
+        //-- метод реализован для того, чтобы в дальнейшем расширить вставку ctrl+v и удаление Dell
         //-- сейчас, как для ctrl+v можно вставить или текст или картинку. Если в буфере и текст и картинка вставляется только текст
         private void PasteCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             //-- Вставка в rtb
             rtb.Paste();
-            //-- Вставка в rtb1
-            //rtb1.Paste();
-
+            
             //-- расширение метода на будущее. не готово ==========================
             /*
             string text = "";
@@ -330,10 +323,6 @@ namespace MyNotes
             //    ms.Read(dibBuffer, 0, dibBuffer.Length);
             //}
 
-
-            //-- Посмотреть здесь!!
-            //http://stackoverflow.com/questions/8442085/receiving-an-image-dragged-from-web-page-to-wpf-window
-
             //--- TEST
             //DataObject retrievedData1 = (DataObject)Clipboard.GetDataObject();
             //if (retrievedData1.GetDataPresent(typeof(BitmapSource)))
@@ -346,7 +335,6 @@ namespace MyNotes
             //    //-- 2022 из буфера тоже....
             //    string ss1 = retrievedData1.GetData(typeof(string)) as string;
             //}
-
 
             //------------------------------------------
             // data to the Clipboard in multiple formats.
@@ -383,6 +371,71 @@ namespace MyNotes
             //}
             */
         }
+
+        #endregion
+
+
+
+
+        //-- для кнопки "Открыть"
+        // открывает выбранный файл в выбранную заметку, можно заметку сохранить с новым содержимым
+        private void buttonOpenFile0_Click(object sender, RoutedEventArgs e)
+        {
+            // окно открытия файла
+            OpenFileDialog ofd = new OpenFileDialog();
+            //ofd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|bmp Files (*.bmp)|*.bmp|All files (*.*)|*.*";
+            ofd.Filter = "RichText Files (*.rtf)|*.rtf|All files (*.*)|*.*";
+
+            string fileName = null;
+            if (ofd.ShowDialog() == true)
+            {
+                fileName = ofd.FileName;
+            }
+            bool isExists = File.Exists(fileName) ? true : false;
+
+            // выводим на экран
+            TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            if (isExists)
+            {
+                try
+                {           
+                    var dataFormat = DataFormats.Rtf;
+                    //if (System.IO.Path.GetExtension(fileName).ToLower() == ".txt")
+                    //    dataFormat = DataFormats.Text;
+                    //else if (System.IO.Path.GetExtension(fileName).ToLower() == ".rtf")
+                    //    dataFormat = DataFormats.Rtf;
+                    //else if (System.IO.Path.GetExtension(fileName).ToLower() == ".bmp")
+                    //    dataFormat = DataFormats.Bitmap;
+
+                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                    doc.Load(fs, dataFormat);
+                    fs.Close();
+                }
+                catch (FileNotFoundException ioEx)
+                {
+                    string ex = ioEx.Message;
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [Serializable]
@@ -647,92 +700,12 @@ namespace MyNotes
 
 
 
-        //-- для кнопки "Открыть"
-        private void buttonOpenFile0_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
-
-            string fileName = null;
-            if (ofd.ShowDialog() == true)
-            {
-                fileName = ofd.FileName;
-            }
-            bool isExists = File.Exists(fileName) ? true : false;
-
-            string strrrrr = "";
-
-            TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-
-            if (isExists)
-            {
-                try
-                {
-                    //using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                    //{
-                    //    if (fs.Length != 0)
-                    //    {
-                    //        string s = "";
-                    //        using (StreamReader sr = new StreamReader(fs, Encoding.Default))
-                    //        {
-                    //            for (int i = 0; !sr.EndOfStream; i++)
-                    //            {
-                    //                // slistF.Add(i, sr.ReadLine());
-                    //                s += sr.ReadLine();
-                    //                //if (s.Trim(new Char[] { ' ', '\t' }).Length > 0)
-                    //                //    slistF.Add(i, s);
-                    //                //else
-                    //                //    i--;
-                    //            }
-                    //        }
-                    //        strrrrr = s;
-                    //    }
-
-                    //    doc.Load(fs, DataFormats.Rtf);
-                    //}
-                    //--
-
-                    var dataFormat = DataFormats.Rtf;
-                    if (System.IO.Path.GetExtension(fileName).ToLower() == ".txt")
-                        dataFormat = DataFormats.Text;
-                    else if (System.IO.Path.GetExtension(fileName).ToLower() == ".rtf")
-                        dataFormat = DataFormats.Rtf;
-                    else if (System.IO.Path.GetExtension(fileName).ToLower() == ".bmp")
-                        dataFormat = DataFormats.Bitmap;
-
-                    FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                    doc.Load(fs, dataFormat);
-                    fs.Close();
-                }
-                catch (FileNotFoundException ioEx)
-                {
-                    string ex = ioEx.Message;
-                }
-            }
-
-            //------------
-            //TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-
-
-
-            //doc.Load(new System.IO.FileStream("my.rtf", System.IO.FileMode.Open), DataFormats.Rtf);
-
-
-
-            //var document = new FlowDocument();
-            //var paragraph = new Paragraph();
-            //SolidColorBrush br = Brushes.White;
-
-            //paragraph.Background = br;
-            //paragraph.Inlines.Add(strrrrr);
-            //document.Blocks.Add(paragraph);
-            //document.Background = Brushes.White;
-            //rtb.Document = document;
-
-            
-        }
 
         
+
+
+
+
         //--кнопка "Открыть блокноты"
         //-- в итоге ничего не делает. что я хотела делать?
         private void OpenNotebooks()
