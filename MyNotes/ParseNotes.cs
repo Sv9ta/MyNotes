@@ -103,25 +103,25 @@ namespace MyNotes
                 else if (System.IO.Path.GetExtension(file.Name).ToLower() == ".bmp")
                     dataFormat = DataFormats.Bitmap;
 
-                FileStream fs = new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
-                byte[] bytes = new byte[fs.Length];
-                int numBytesToRead = (int)fs.Length;
-                int n = fs.Read(bytes, 0, numBytesToRead);
-                fs.Close();
-
-                items.Add(new Item()
+                using (FileStream fs = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
                 {
-                    Name = file.Name.Substring(0, file.Name.Length - file.Extension.Length),
-                    Type = file.LastWriteTime.ToShortDateString(),
-                    DataFormat = dataFormat,
-                    DTimeModified = file.LastWriteTime,
-                    DTimeCreate = file.CreationTime,
-                    Fs = fs,
-                    NoteBytes = bytes,
-                    Path = file.FullName
-                });
-            }
+                    byte[] bytes = new byte[fs.Length];
+                    int numBytesToRead = (int)fs.Length;
+                    int n = fs.Read(bytes, 0, numBytesToRead);
+                    fs.Close();
 
+                    items.Add(new Item()
+                    {
+                        Name = file.Name.Substring(0, file.Name.Length - file.Extension.Length),
+                        Type = file.LastWriteTime.ToShortDateString(),
+                        DataFormat = dataFormat,
+                        DTimeModified = file.LastWriteTime,
+                        DTimeCreate = file.CreationTime,
+                        NoteBytes = bytes,
+                        Path = file.FullName
+                    });
+                }
+            }
             return items;
         }
 
@@ -165,7 +165,8 @@ namespace MyNotes
                     int n = fs.Read(bytes, 0, numBytesToRead);
 
                     itm.Name = NoteName;
-                    itm.DTimeModified = DateTime.Today; //-- взять время сохранения
+                    //itm.DTimeModified = DateTime.Today;
+                    itm.DTimeModified = File.GetLastWriteTime(NotePath2);
                     itm.NoteBytes = bytes;
                     itm.Fs = fs;
                     itm.Path = NotePath2;

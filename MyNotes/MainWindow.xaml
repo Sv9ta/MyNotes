@@ -106,7 +106,8 @@
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0" Foreground="White">
                 <Menu.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#4E7BA7" Offset="0"/>
+                        <!--<GradientStop Color="#4E7BA7" Offset="0"/>-->
+                        <GradientStop Color="#FF7DB0E2" Offset="0"/>
                         <GradientStop Color="#D3D0DA" Offset="1"/>
                     </LinearGradientBrush>
                 </Menu.Background>
@@ -119,24 +120,26 @@
                 </MenuItem>
             </Menu>
             <!--<TextBox AcceptsReturn="True" BorderThickness="0" Background="#FFBF3F3F" />-->
-            <Separator VerticalAlignment="Bottom" Background="#D28F1B"  />
+            <Separator VerticalAlignment="Bottom" Background="#FFE8A657"  />
         </DockPanel>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="26" Margin="30,30,30,10" Foreground="#D28F1B" FontWeight="Bold" FontFamily="Viner Hand ITC" Background="#FFFBF6F2" ><Run Text="    My Notes"/></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="26" Margin="30,30,30,10" Foreground="#FFE8A657" FontWeight="Bold" FontFamily="Viner Hand ITC" Background="#FFFBF6F2" ><Run Text="    My Notes"/></TextBlock>
 
         <!--1 панелька - Блокноты-->
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="0,0,0,0" Background="#FFE9E7ED">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF7DB0E2" Offset="0"/>
                         <GradientStop Color="#D3D0DA" Offset="1"/>
-                        <GradientStop Color="#4E7BA7" Offset="0"/>
+                        <!--<GradientStop Color="#4E7BA7" Offset="0"/>-->
                     </LinearGradientBrush>
                 </StackPanel.Background>
-                <Image Stretch="None" Source=".\Images\notebook2_icon.png" />
-                <TextBlock VerticalAlignment="Top" Foreground="#FF2D3033" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Записные книжки"/></TextBlock>
+                <!--<Image Stretch="None" Source=".\Images\notebook2_icon.png" />-->
+                <Image Stretch="None" Source=".\Images\stack_dark_icon.png" />
+                <TextBlock VerticalAlignment="Top" Foreground="#FF5A5C5F" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Записные книжки"/></TextBlock>
             </StackPanel>
-            <TreeView x:Name="trvStructure" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="TreeViewItem_Selected" Margin="2" Background="#FFE9E7ED">
+            <TreeView x:Name="trvStructure" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="TreeViewItem_Selected" Margin="2" Background="#FFE9E7ED" BorderBrush="#FF8991A0">
                 <!--<TreeView.Style>
                     <Style TargetType="TreeView">
                         <Setter Property="Background" Value="Bisque"/>
@@ -157,11 +160,12 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#4E7BA7" Offset="0"/>
+                        <!--<GradientStop Color="#4E7BA7" Offset="0"/>-->
+                        <GradientStop Color="#FF7DB0E2" Offset="0"/>
                         <GradientStop Color="#D3D0DA" Offset="1"/>
                     </LinearGradientBrush>
                 </StackPanel.Background>
-                <Image Stretch="None" Source=".\Images\notebook3_icon.png" />
+                <Image Stretch="None" Source=".\Images\notebook2_icon.png" />
                 <TextBlock x:Name="NotebookNameTbl" VerticalAlignment="Top" Foreground="#FF1B1C1D" Margin="4" FontSize="14" FontFamily="Segoe UI Light"/>
             </StackPanel>
             <ListView x:Name="NotesLv" Margin="0" BorderThickness="0" SelectionChanged="NotesLv_SelectionChanged" Background="#FFF3EBEB">
@@ -179,25 +183,21 @@
             </ListView>
         </StackPanel>
 
-        <GridSplitter Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#D28F1B" />
+        <GridSplitter Grid.Row="1" Grid.Column="2" Grid.RowSpan="3" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFE8A657" />
 
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Margin="6,0,0,0">
             <!--1-я горизонтальная панель заметок-->
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="NotePaneltbl1"  Height="20" VerticalAlignment="Center" DockPanel.Dock="Left"  Foreground="#FF1B1C1D"/>
-                <!--<Button x:Name="buttonSave" Margin="0,0,50,0" Width="20" Height="20" BorderThickness="0" DockPanel.Dock="Right" Click="buttonSave_Click">
-                    <Button.Background>
-                        <ImageBrush ImageSource=".\Images\save.png" />
-                    </Button.Background>
-                </Button>-->
             </DockPanel>
             <!--2-я горизонтальная панель заметок-->
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="NotePaneltbl2" DockPanel.Dock="Left"  Height="20" VerticalAlignment="Center" Foreground="#FF3374D1" Margin="0,10,0,0" />
-                <Image Width="20" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" ToolTip="Удалить заметку" DockPanel.Dock="Right">
+                <Image Width="24" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" ToolTip="Удалить заметку" DockPanel.Dock="Right" Opacity="0.7">
                     <Image.Source>
                         <BitmapImage>
-                            <BitmapImage.UriSource>.\Images\busket2_icon.png</BitmapImage.UriSource>
+                            <!--<BitmapImage.UriSource>.\Images\busket2_icon.png</BitmapImage.UriSource>-->
+                            <BitmapImage.UriSource>.\Images\delete.png</BitmapImage.UriSource>
                         </BitmapImage>
                     </Image.Source>
                     <Image.Triggers>
@@ -212,10 +212,10 @@
                         <ScaleTransform ScaleX="1" ScaleY="1"/>
                     </Image.RenderTransform>
                 </Image>
-                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" ToolTip="Сохранить заметку" DockPanel.Dock="Right">
+                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" ToolTip="Сохранить заметку" DockPanel.Dock="Right" Opacity="0.7">
                     <Image.Source>
                         <BitmapImage>
-                            <BitmapImage.UriSource>.\Images\save.png</BitmapImage.UriSource>
+                            <BitmapImage.UriSource>.\Images\save2.png</BitmapImage.UriSource>
                         </BitmapImage>
                     </Image.Source>
                     <Image.Triggers>
@@ -230,6 +230,9 @@
                         <ScaleTransform ScaleX="1" ScaleY="1"/>
                     </Image.RenderTransform>
                 </Image>
+               
+                <!--<Image Width="22" Source=".\Images\delete.png"></Image>-->
+                
             </DockPanel>
             <!--3-я горизонтальная панель редактирование-->
             <StackPanel Name="EditNote" Orientation="Horizontal" Visibility="Collapsed">
@@ -270,8 +273,8 @@
                     <TextBox Name="NoteNameTbx" BorderThickness="1"  FontWeight="Normal" FontSize="16" Height="30" Margin="0,0,0,10" Foreground="#FF424141" VerticalAlignment="Bottom" >
                         <TextBox.Background>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                <GradientStop Color="#D28F1B" Offset="0"/>
-                                <GradientStop Color="#D28F1B" Offset="1"/>
+                                <GradientStop Color="#FFEFCE95" Offset="0"/>
+                                <GradientStop Color="#FFEFCE95" Offset="1"/>
                             </LinearGradientBrush>
                         </TextBox.Background>
                     </TextBox>

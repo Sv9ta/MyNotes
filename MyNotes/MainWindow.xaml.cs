@@ -41,7 +41,7 @@ namespace MyNotes
             //-- 2022 берем корневую папку поумолчанию. Получаем дерево вложенных директорий
             trvStructure.BorderThickness = new Thickness(0);
             //trvStructure.BorderBrush = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));  // transparent
-            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\test");
+            System.IO.DirectoryInfo rootDir = new System.IO.DirectoryInfo("C:\\Users\\Sveta\\Desktop\\NoteBook");
             System.IO.DirectoryInfo[] subDirs = rootDir.GetDirectories();
             foreach (System.IO.DirectoryInfo dirInfo in subDirs)
             {
@@ -72,9 +72,119 @@ namespace MyNotes
         }
 
 
-
-
         public static string NotePath = "";
+
+
+        #region Операции с деревом директорий (Записных книжек)
+
+        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = e.Source as TreeViewItem;
+
+            DirectoryInfo expandedDir = ParseNotes.TreeViewItemExpanded(item);
+            if (expandedDir.GetFiles("*.*") != null)
+            {
+                NotesLv.ItemsSource = ParseNotes.FillNotes(expandedDir.GetFiles("*.*"), expandedDir.Name);
+                //--выделяем первую заметку
+                NotesLv.SelectedIndex = 0;
+                //-- задаем название блокнота
+                NotebookNameTbl.Text = expandedDir.Name;
+                //-- название блокнота в заметке
+                NotePaneltbl1.Text = "Записная книжка: " + expandedDir.Name;
+            }
+        }
+
+        //--Выбор элемента из дерева папок
+        private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
+        {
+            DirectoryInfo selectedDir = null;
+            TreeViewItem item = e.Source as TreeViewItem;
+            if (item.Tag is DirectoryInfo)
+                selectedDir = (item.Tag as DirectoryInfo);
+            if (selectedDir.GetFiles("*.*") != null)
+            {
+                NotesLv.ItemsSource = ParseNotes.FillNotes(selectedDir.GetFiles("*.*"), selectedDir.Name);
+                //--выделяем первую заметку
+                NotesLv.SelectedIndex = 0;
+                //-- задаем название блокнота
+                NotebookNameTbl.Text = selectedDir.Name;
+                //-- название блокнота в заметке
+                NotePaneltbl1.Text = "Записная книжка: " + selectedDir.Name;
+            }
+        }
+
+        //-- 2022 вывод заметки на экран
+        private void NotesLv_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            Item item = ((sender as ListView).SelectedItem as Item);
+            if (item != null)
+            {
+                //--выводим заметку на экран
+                TextRange note = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                           
+                Stream outputStream = new MemoryStream();
+                if (outputStream.CanWrite)
+                {
+                    outputStream.Write(item.NoteBytes, 0, item.NoteBytes.Length);
+                }
+                try
+                {
+                    // Предполагаются файлы в формате Rich Text Format
+                    if (note.CanLoad(item.DataFormat))
+                        note.Load(outputStream, item.DataFormat);
+                }
+                catch (Exception ex) { }
+
+                //-- информация о заметке
+                NotePaneltbl2.Inlines.Clear();
+                Run rn;
+                rn = new Run();
+                rn.Text = "Создана: ";
+                rn.Foreground = Brushes.Black;
+                NotePaneltbl2.Inlines.Add(rn);
+                rn = new Run();
+                rn.Text = item.DTimeCreate.ToShortDateString() + " " + item.DTimeCreate.ToShortTimeString();
+                NotePaneltbl2.Inlines.Add(rn);
+                rn = new Run();
+                rn.Text = "   Изменена: ";
+                rn.Foreground = Brushes.Black;
+                NotePaneltbl2.Inlines.Add(rn);
+                rn = new Run();
+                rn.Text = item.DTimeModified.ToShortDateString() + " " + item.DTimeModified.ToShortTimeString();
+                NotePaneltbl2.Inlines.Add(rn);
+
+                NoteNameTbx.Text = item.Name;
+
+                NotePath = item.Path;
+            }
+        }
+
+        #endregion
+
+        
+        //-- Иконка "сохранить заметку"
+        private void ImgSave_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            ParseNotes.SaveNote(NotePath, NoteNameTbx.Text, doc, (List<Item>)NotesLv.ItemsSource);
+            NotesLv.Items.Refresh();
+        }
+
+        //-- Иконка "удалить заметку"
+        private void ImgDell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            //NotesLv.SelectedItem
+            //NotesLv.ItemsSource
+            //e.Source
+            //DirectoryInfo selectedDir = null;
+            //TreeViewItem item = e.Source as TreeViewItem;
+            //if (item.Tag is DirectoryInfo)
+            //    selectedDir = (item.Tag as DirectoryInfo);
+            //NodePath
+        }
+
+
+
 
 
         //Вообщем помучился еще немного, вы правы смотря откуда копируешь. 
@@ -486,31 +596,31 @@ namespace MyNotes
         //}
 
 
-        private void buttonSave_Click(object sender, RoutedEventArgs e)
-        {
-            //SaveFileDialog sfd = new SaveFileDialog();
-            //sfd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
-            //if (sfd.ShowDialog() == true)
-            //{
-                TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-                //using (FileStream fs = File.Create(sfd.FileName))
-                using (FileStream fs = File.Create(NotePath))
-                {
-                    if (System.IO.Path.GetExtension(NotePath).ToLower() == ".rtf")
-                    {
-                        doc.Save(fs, DataFormats.Rtf);
-                    }
-                    else if (System.IO.Path.GetExtension(NotePath).ToLower() == ".txt")
-                    {
-                        doc.Save(fs, DataFormats.Text);
-                    }
-                    else
-                    {
-                        doc.Save(fs, DataFormats.Xaml);
-                    }
-                }
-            //}
-        }
+        //private void buttonSave_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //SaveFileDialog sfd = new SaveFileDialog();
+        //    //sfd.Filter = "Text Files (*.txt)|*.txt|RichText Files (*.rtf)|*.rtf|XAML Files (*.xaml)|*.xaml|All files (*.*)|*.*";
+        //    //if (sfd.ShowDialog() == true)
+        //    //{
+        //        TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+        //        //using (FileStream fs = File.Create(sfd.FileName))
+        //        using (FileStream fs = File.Create(NotePath))
+        //        {
+        //            if (System.IO.Path.GetExtension(NotePath).ToLower() == ".rtf")
+        //            {
+        //                doc.Save(fs, DataFormats.Rtf);
+        //            }
+        //            else if (System.IO.Path.GetExtension(NotePath).ToLower() == ".txt")
+        //            {
+        //                doc.Save(fs, DataFormats.Text);
+        //            }
+        //            else
+        //            {
+        //                doc.Save(fs, DataFormats.Xaml);
+        //            }
+        //        }
+        //    //}
+        //}
 
 
 
@@ -699,82 +809,7 @@ namespace MyNotes
 
    
 
-        private void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
-        {
-            TreeViewItem item = e.Source as TreeViewItem;
-           
-            DirectoryInfo expandedDir = ParseNotes.TreeViewItemExpanded(item);
-            if (expandedDir.GetFiles("*.*") != null)
-            {
-                NotesLv.ItemsSource = ParseNotes.FillNotes(expandedDir.GetFiles("*.*"), expandedDir.Name);
-                //--выделяем первую заметку
-                NotesLv.SelectedIndex = 0;
-                //-- задаем название блокнота
-                NotebookNameTbl.Text = expandedDir.Name;
-                //-- название блокнота в заметке
-                NotePaneltbl1.Text = "Записная книжка: " + expandedDir.Name;
-            }
-        }
-
-      
-
-
-
-       
-
-        //--Выбор элемента из дерева папок
-        private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
-        {
-            DirectoryInfo selectedDir = null;
-            TreeViewItem item = e.Source as TreeViewItem;
-            if (item.Tag is DirectoryInfo)
-                selectedDir = (item.Tag as DirectoryInfo);
-            if (selectedDir.GetFiles("*.*") != null)
-            {
-                NotesLv.ItemsSource = ParseNotes.FillNotes(selectedDir.GetFiles("*.*"), selectedDir.Name);
-                //--выделяем первую заметку
-                NotesLv.SelectedIndex = 0;
-                //-- задаем название блокнота
-                NotebookNameTbl.Text = selectedDir.Name;
-                //-- название блокнота в заметке
-                NotePaneltbl1.Text = "Записная книжка: " + selectedDir.Name;
-            }
-        }
-
-        //-- 2022 вывод заметки на экран
-        private void NotesLv_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            Item item = ((sender as ListView).SelectedItem as Item);
-            if (item != null)
-            {
-                //--выводим заметку на экран
-                TextRange note = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-                Stream outputStream = new MemoryStream();
-                outputStream.Write(item.NoteBytes, 0, item.NoteBytes.Length);
-                note.Load(outputStream, item.DataFormat);
-                //-- информация о заметке
-                NotePaneltbl2.Inlines.Clear();
-                Run rn;
-                rn = new Run();
-                rn.Text = "Создана: ";
-                rn.Foreground = Brushes.Black;
-                NotePaneltbl2.Inlines.Add(rn);
-                rn = new Run();
-                rn.Text = item.DTimeCreate.ToShortDateString() + " " + item.DTimeCreate.ToShortTimeString();
-                NotePaneltbl2.Inlines.Add(rn);
-                rn = new Run();
-                rn.Text = "   Изменена: ";
-                rn.Foreground = Brushes.Black;
-                NotePaneltbl2.Inlines.Add(rn);
-                rn = new Run();
-                rn.Text = item.DTimeModified.ToShortDateString() + " " + item.DTimeModified.ToShortTimeString();
-                NotePaneltbl2.Inlines.Add(rn);
-
-                NoteNameTbx.Text = item.Name;
-
-                NotePath = item.Path;
-            }
-        }
+     
 
 
         #region Панелька редактирования текста
@@ -902,65 +937,11 @@ namespace MyNotes
         //    fs.Close();
         //}
 
-        private void ImgSave_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-
-            ParseNotes.SaveNote(NotePath, NoteNameTbx.Text, doc, (List<Item>)NotesLv.ItemsSource);
+       
 
 
-            ////--переименование (Название заметки)
-            //int c = NotePath.LastIndexOf('\\');
-            //string path = NotePath.Substring(0, c + 1);
-            //string NotePath2 = path + NoteNameTbx.Text + ".rtf";
-            //File.Move(NotePath, NotePath2);
 
-            //TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            //FileStream fs = File.Create(NotePath2);
-            ////using (FileStream fs = File.Create(NotePath))
-            ////{
-            //if (System.IO.Path.GetExtension(NotePath2).ToLower() == ".rtf")
-            //{
-            //    doc.Save(fs, DataFormats.Rtf);
-            //}
-            //else if (System.IO.Path.GetExtension(NotePath2).ToLower() == ".txt")
-            //{
-            //    doc.Save(fs, DataFormats.Text);
-            //}
-            //else
-            //{
-            //    doc.Save(fs, DataFormats.Xaml);
-            //}
-            ////}
-            ////-- обновление заметки в списке заметок
-            //List<Item> items = new List<Item>();
-            //items = (List<Item>)NotesLv.ItemsSource;
-            //foreach (Item itm in items)
-            //{
-            //    if (itm.Path == NotePath)
-            //    {
-            //        fs.Position = 0;
-            //        byte[] bytes = new byte[fs.Length];
-            //        int numBytesToRead = (int)fs.Length;
-            //        int n = fs.Read(bytes, 0, numBytesToRead);
-
-            //        itm.Name = NoteNameTbx.Text;
-            //        itm.DTimeModified = DateTime.Today; //-- взять время сохранения
-            //        itm.NoteBytes = bytes;
-            //        itm.Fs = fs;
-            //        itm.Path = NotePath2;
-            //        NotePath = NotePath2;
-
-            //        break;
-            //    }
-            //}
-            //fs.Close();
-        }
-
-        private void ImgDell_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
+  
 
     }
 
