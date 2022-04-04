@@ -103,7 +103,7 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.ColumnSpan="5">
-            <Menu DockPanel.Dock="Top" Margin="0,0,0,0" Foreground="White">
+            <Menu DockPanel.Dock="Top" Margin="0,0,0,0" Foreground="#FF585353">
                 <Menu.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <!--<GradientStop Color="#4E7BA7" Offset="0"/>-->
@@ -111,12 +111,11 @@
                         <GradientStop Color="#D3D0DA" Offset="1"/>
                     </LinearGradientBrush>
                 </Menu.Background>
-                <MenuItem Header="_File">
-                    <MenuItem Header="_New" />
-                    <MenuItem Header="_Open" />
-                    <MenuItem Header="_Save" />
+                <MenuItem Header="File">
+                    <MenuItem Header="Open Notebook" Click="MenuOpen_Click"/>
+                    <MenuItem Header="New-does not work" />
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="Exit" Click="MenuExit_Click"/>
                 </MenuItem>
             </Menu>
             <!--<TextBox AcceptsReturn="True" BorderThickness="0" Background="#FFBF3F3F" />-->
@@ -279,23 +278,15 @@
                         </TextBox.Background>
                     </TextBox>
                     <!--<Separator />-->
-                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="200" Background="White">
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="250" Background="White">
                         <RichTextBox x:Name="rtb" BorderThickness="0" SelectionChanged="rtb_SelectionChanged" AcceptsTab="True" AcceptsReturn="True" />
                     </ScrollViewer>
                 </StackPanel>
             </Border>
         </UniformGrid>
 
-        <!--<RichTextBox x:Name="rtb1" Grid.Row="2" Grid.Column="5"  Height="200" Margin="4,4,4,4" BorderBrush="#FF404244" BorderThickness="1" Width="200" Background="#FFDFF075">
-        </RichTextBox>-->
-
-
-        <!--<TextBox AcceptsReturn="True" Name="txtEditor" Grid.Row="2" />-->
-        <!--<WebBrowser x:Name="myWebBrowser" Grid.Row="2" Grid.Column="6" OpacityMask="#FFA8CFA1" />-->
-
         <Button x:Name="buttonOpenFile0" ToolTip="открыть содержимое файла в эту заметку" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
-        <Button x:Name="buttonOpenNotebooks" Height="20" Grid.Row="4" Grid.Column="4" Width="120" Content="Открыть блокноты" Click="buttonOpenNotebooks_Click" Margin="10,0,10,0" VerticalAlignment="Center"  />
-
+        
         <DockPanel Grid.Row="6" Grid.Column="3">
             <WrapPanel DockPanel.Dock="Top" Margin="3" Height="27" RenderTransformOrigin="0.498,1.148" >
                 <Button Command="ApplicationCommands.Cut" ToolTip="Удалить строки или картинки" Width="60" Content="_Cut"/>

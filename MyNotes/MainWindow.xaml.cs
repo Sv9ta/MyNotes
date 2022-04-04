@@ -52,11 +52,19 @@ namespace MyNotes
 
 
         public static string NotePath = "";
-           
 
 
-        //-- нажатие кнопки "Открыть блокноты"
-        private void buttonOpenNotebooks_Click(object sender, RoutedEventArgs e)
+        #region Верхнее меню
+
+        // Меню - закрыть приложение
+        private void MenuExit_Click(object sender, RoutedEventArgs e)
+        {
+            // Close this window
+            this.Close();
+        }
+
+        // кнопка меню - открыть записную книжку
+        private void MenuOpen_Click(object sender, RoutedEventArgs e)
         {
             string folderName = ParseNotes.ChooseNotebookFolder();
 
@@ -71,6 +79,8 @@ namespace MyNotes
             }
             ((TreeViewItem)trvStructure.Items[0]).IsSelected = true;
         }
+
+        #endregion
 
 
         #region Операции с деревом директорий (Записных книжек)
