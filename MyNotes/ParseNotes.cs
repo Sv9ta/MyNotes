@@ -22,6 +22,24 @@ namespace MyNotes
     internal class ParseNotes
     {
 
+        // Открыть папку с Записными книжками
+        public static string ChooseNotebookFolder()
+        {
+            string folderName = null;
+
+            System.Windows.Forms.FolderBrowserDialog folderBrowser = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowser.Description = "Select the directory that you want to use as NoteBook.";
+
+            System.Windows.Forms.DialogResult result = folderBrowser.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                folderName = folderBrowser.SelectedPath;
+            }
+
+            return folderName;
+        }
+
 
         //--Bозвращает дерево всех вложенных директорий TreeViewItem
         public static TreeViewItem CreateTreeItem(object o)
