@@ -85,7 +85,7 @@ namespace MyNotes
         {
             DirectoryInfo expandedDir = null;
 
-            if ((item.Items.Count == 1) && (item.Items[0] is string))
+            //if ((item.Items.Count == 1) && (item.Items[0] is string))
             {
                 item.Items.Clear();
 

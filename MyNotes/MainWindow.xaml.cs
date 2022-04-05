@@ -102,6 +102,7 @@ namespace MyNotes
             }
         }
 
+
         //--Выбор элемента из дерева папок
         private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
         {
@@ -725,13 +726,16 @@ namespace MyNotes
 
         private void cmbFontSize_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
+            if (cmbFontSize.Text != "{DependencyProperty.UnsetValue}")
             {
-                rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cmbFontSize.Text);
-            }
-            catch (Exception ex) {
-                rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, "12");
-                //System.Windows.Controls.TextChangedEventArgs
+                try
+                {
+                    rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, cmbFontSize.Text);
+                }
+                catch (Exception ex)
+                {
+                    rtb.Selection.ApplyPropertyValue(Inline.FontSizeProperty, "12");
+                }
             }
         }
 
