@@ -24,25 +24,7 @@
                 <Trigger Property="IsMouseOver"  Value="True">
                     <Setter Property="Background" Value="#FFE0E0E0" />
                 </Trigger>
-                <!--<Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground"  Value="DarkOrange" />
-                    <Setter Property="FocusVisualStyle" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
-                    <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                </Trigger>-->
             </Style.Triggers>
-
-            <!--<Style.Triggers>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsSelected" Value="True" />
-                        <Condition Property="IsMouseOver" Value="True" />
-                    </MultiTrigger.Conditions>
-                    <MultiTrigger.Setters>
-                        <Setter Property="Background" Value="LightGreen" />
-                    </MultiTrigger.Setters>
-                </MultiTrigger>
-            </Style.Triggers>-->
         </Style>
 
         <Style TargetType="{x:Type ListView}">
@@ -94,15 +76,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="170"/>
-            <!--<ColumnDefinition Width="auto"/>-->
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="600"/>
-            <!--<ColumnDefinition Width="250"/>-->
+            <!--<ColumnDefinition Width="600"/>-->
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.ColumnSpan="5">
+        <DockPanel Grid.ColumnSpan="4">
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0" Foreground="#FF585353">
                 <Menu.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -122,10 +102,10 @@
             <Separator VerticalAlignment="Bottom" Background="#FFE8A657"  />
         </DockPanel>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontSize="26" Margin="30,30,30,10" Foreground="#FFE8A657" FontWeight="Bold" FontFamily="Viner Hand ITC" Background="#FFFBF6F2" ><Run Text="    My Notes"/></TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" FontSize="26" Margin="30,30,30,10" Foreground="#FFE8A657" FontWeight="Bold" FontFamily="Viner Hand ITC" Background="#FFFBF6F2" ><Run Text="    My Notes"/></TextBlock>
 
         <!--1 панелька - Блокноты-->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Margin="0,0,0,0" Background="#FFE9E7ED">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Margin="0,0,0,0" Background="#FFE9E7ED">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -155,7 +135,7 @@
         <!--<GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#FFE236D3" />-->
 
         <!--2 панелька - Заметки-->
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,0,0" Background="#FFF3EBEB">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" Margin="0,0,0,0" Background="#FFF3EBEB">
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -277,9 +257,9 @@
                             </LinearGradientBrush>
                         </TextBox.Background>
                     </TextBox>
-                    <!--<Separator />-->
-                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="250" Background="White">
-                        <RichTextBox x:Name="rtb" BorderThickness="0" SelectionChanged="rtb_SelectionChanged" AcceptsTab="True" AcceptsReturn="True" />
+
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" Height="280"  Background="White">
+                        <RichTextBox x:Name="rtb" BorderThickness="0" Width="600" VerticalAlignment="Stretch" SelectionChanged="rtb_SelectionChanged" AcceptsTab="True" AcceptsReturn="True" />
                     </ScrollViewer>
                 </StackPanel>
             </Border>

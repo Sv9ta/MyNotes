@@ -183,7 +183,6 @@ namespace MyNotes
                     int n = fs.Read(bytes, 0, numBytesToRead);
 
                     itm.Name = NoteName;
-                    //itm.DTimeModified = DateTime.Today;
                     itm.DTimeModified = File.GetLastWriteTime(NotePath2);
                     itm.NoteBytes = bytes;
                     itm.Fs = fs;
@@ -195,10 +194,6 @@ namespace MyNotes
             }
             fs.Close();
         }
-
-
-
-
 
 
     }

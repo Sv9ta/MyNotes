@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-//using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-//using System.Windows.Navigation;
-//using System.Windows.Shapes;
 using System.IO;
 using System.Collections;
 using Microsoft.Win32;
-//using System.Globalization;
 //using System.Windows.Forms; // для FolderBrowserDialog
 
 
@@ -430,278 +424,12 @@ namespace MyNotes
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Serializable]
-        public class Customer
-        {
-            private string nameValue = string.Empty;
-            public Customer(String name)
-            {
-                nameValue = name;
-            }
-            public string Name
-            {
-                get { return nameValue; }
-                set { nameValue = value; }
-            }
-        }
-
-        // Demonstrates SetData, ContainsData, and GetData
-        // using a custom format name and a business object.
-        public Customer TestCustomFormat
-        {
-            get
-            {
-                Clipboard.SetData("CustomerFormat", new Customer("Customer Name"));
-                if (Clipboard.ContainsData("CustomerFormat"))
-                {
-                    return Clipboard.GetData("CustomerFormat") as Customer;
-                }
-                return null;
-            }
-        }
-
-        //--------------
-
-
-
-
-        private ImageSource ImageFromClipboardDib()
-        {
-            MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;
-            BitmapImage bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.StreamSource = ms;
-            bmp.EndInit();
-            return bmp;
-        }
-
-        //private ImageSource ImageFromClipboardDib()
-        //{
-        //    MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;
-        //    if (ms != null)
-        //    {
-        //        byte[] dibBuffer = new byte[ms.Length];
-        //        ms.Read(dibBuffer, 0, dibBuffer.Length);
-
-        //        BITMAPINFOHEADER infoHeader =
-        //            BinaryStructConverter.FromByteArray<BITMAPINFOHEADER>(dibBuffer);
-
-        //        int fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
-        //        int infoHeaderSize = infoHeader.biSize;
-        //        int fileSize = fileHeaderSize + infoHeader.biSize + infoHeader.biSizeImage;
-
-        //        BITMAPFILEHEADER fileHeader = new BITMAPFILEHEADER();
-        //        fileHeader.bfType = BITMAPFILEHEADER.BM;
-        //        fileHeader.bfSize = fileSize;
-        //        fileHeader.bfReserved1 = 0;
-        //        fileHeader.bfReserved2 = 0;
-        //        fileHeader.bfOffBits = fileHeaderSize + infoHeaderSize + infoHeader.biClrUsed * 4;
-
-        //        byte[] fileHeaderBytes =
-        //            BinaryStructConverter.ToByteArray<BITMAPFILEHEADER>(fileHeader);
-
-        //        MemoryStream msBitmap = new MemoryStream();
-        //        msBitmap.Write(fileHeaderBytes, 0, fileHeaderSize);
-        //        msBitmap.Write(dibBuffer, 0, dibBuffer.Length);
-        //        msBitmap.Seek(0, SeekOrigin.Begin);
-
-        //        return BitmapFrame.Create(msBitmap);
-        //    }
-        //    return null;
-        //}
-
-
-
-        //public class BITMAPINFOHEADER
-        //{
-        //    public uint size;
-        //    public int width;
-        //    public int height;
-        //    public ushort biPlanes;
-        //    public ushort biBitCount;
-        //    public uint biCompression;
-        //    public uint biSizeImage;
-        //    public int biXPelsPerMeter;
-        //    public int biYPelsPerMeter;
-        //    public uint biClrUsed;
-        //    public uint biClrImportant;
-        //}
-
-
-        //[StructLayout(LayoutKind.Sequential, Pack = 2)]
-        private struct BITMAPFILEHEADER
-        {
-            public static readonly short BM = 0x4d42; // BM
-
-            public short bfType;
-            public int bfSize;
-            public short bfReserved1;
-            public short bfReserved2;
-            public int bfOffBits;
-        }
-
-        //[StructLayout(LayoutKind.Sequential)]
-        private struct BITMAPINFOHEADER
-        {
-            public int biSize;
-            public int biWidth;
-            public int biHeight;
-            public short biPlanes;
-            public short biBitCount;
-            public int biCompression;
-            public int biSizeImage;
-            public int biXPelsPerMeter;
-            public int biYPelsPerMeter;
-            public int biClrUsed;
-            public int biClrImportant;
-        }
-
-        //public static class BinaryStructConverter
-        //{
-        //    public static T FromByteArray<T>(byte[] bytes) where T : struct
-        //    {
-        //        IntPtr ptr = IntPtr.Zero;
-        //        try
-        //        {
-        //            int size = Marshal.SizeOf(typeof(T));
-        //            ptr = Marshal.AllocHGlobal(size);
-        //            Marshal.Copy(bytes, 0, ptr, size);
-        //            object obj = Marshal.PtrToStructure(ptr, typeof(T));
-        //            return (T)obj;
-        //        }
-        //        finally
-        //        {
-        //            if (ptr != IntPtr.Zero)
-        //                Marshal.FreeHGlobal(ptr);
-        //        }
-        //    }
-
-        //    public static byte[] ToByteArray<T>(T obj) where T : struct
-        //    {
-        //        IntPtr ptr = IntPtr.Zero;
-        //        try
-        //        {
-        //            int size = Marshal.SizeOf(typeof(T));
-        //            ptr = Marshal.AllocHGlobal(size);
-        //            Marshal.StructureToPtr(obj, ptr, true);
-        //            byte[] bytes = new byte[size];
-        //            Marshal.Copy(ptr, bytes, 0, size);
-        //            return bytes;
-        //        }
-        //        finally
-        //        {
-        //            if (ptr != IntPtr.Zero)
-        //                Marshal.FreeHGlobal(ptr);
-        //        }
-        //    }
-        //}
-
-
-
-
-
-
-
-
-        //public void btnMarkUp_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    if (btnMarkUp.IsChecked.Value)
-        //    {
-        //        xamlTb.Visibility = System.Windows.Visibility.Visible;
-        //        xamlTb.IsTabStop = true;
-        //       // xamlTb.Text = rtb.Xaml;
-        //    }
-        //    else
-        //    {
-        //       // rtb.Xaml = xamlTb.Text;
-        //        xamlTb.Visibility = System.Windows.Visibility.Collapsed;
-        //        xamlTb.IsTabStop = false;
-        //    }
-
-        //}
-
-        private byte[] GetImageByteArray(BitmapImage src)
-        {
-            MemoryStream stream = new MemoryStream();
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create((BitmapSource)src));
-            encoder.Save(stream);
-            stream.Flush();
-            return stream.ToArray();
-        }
-
-        private byte[] GetImageByteArray(BitmapSource src)
-        {
-            MemoryStream stream = new MemoryStream();
-            BmpBitmapEncoder encoder = new BmpBitmapEncoder();
-            encoder.Frames.Add(BitmapFrame.Create(src));
-            encoder.Save(stream);
-            stream.Flush();
-            return stream.ToArray();
-        }
-
-       // private static void OnPaste(object sender, ExecutedRoutedEventArgs e)
-        //{
-        ////    RichTextBox richTextBox = sender as RichTextBox;
-        ////    if (richTextBox == null) { return; }
-
-        //    var dataObj = (IDataObject)Clipboard.GetDataObject();
-        //    if (dataObj == null) { return; }
-
-        //    if (Clipboard.ContainsText(TextDataFormat.Rtf))
-        //    {
-        //        string rtfText = Clipboard.GetText(TextDataFormat.Rtf);
-        ////        TextSelection ts = richTextBox.Selection;
-        ////        TextRange textRange = new TextRange(richTextBox.Selection.Start, richTextBox.Selection.End);
-        ////        if (textRange.CanLoad(DataFormats.Rtf))
-        ////        {
-        ////            textRange.Load(new MemoryStream(_encoding.GetBytes(rtfText)), DataFormats.Rtf);
-        ////            SetDefaultFontColor(textRange);
-        ////        }
-        //    }
-
-        ////    e.Handled = true;
-        //}
-
-
-       
-
-
-
-
-        
-
-
-
-
-
-
-   
-
-     
-
-
         #region Панелька редактирования текста
-        
+
         private void rtb_SelectionChanged(object sender, RoutedEventArgs e)
         {
             EditNote.Visibility = Visibility.Visible;
-            //-- "\r\n0\r\n0\r\n0\r\n0\r\n0\r\n0\r\n0\r\n \r\n\r\n"
+
             if (rtb.Selection != null && rtb.Selection.Text.Trim().Length > 0)
             {
                 object temp = rtb.Selection.GetPropertyValue(Inline.FontWeightProperty);
@@ -746,116 +474,150 @@ namespace MyNotes
 
         private void colorList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //---посмотреть----------
-            //System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
-
-            //if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            //{
-            //    BrushConverter conv = new BrushConverter();
-
-            //    string strColor = System.Drawing.ColorTranslator.ToHtml(dlg.Color);
-
-            //    btnColor.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(strColor));
-            //}
-            //-----------------------
-
             Brush selectedColor = (Brush)(e.AddedItems[0] as System.Reflection.PropertyInfo).GetValue(null, null);
             rtb.Selection.ApplyPropertyValue(Inline.ForegroundProperty, selectedColor);
-            //colorRect.Fill = selectedColor;
             buttonColorPick.Background = selectedColor;
-
-            //http://www.c-sharpcorner.com/UploadFile/87b416/create-color-picker-in-wpf/
-            //http://www.codeproject.com/Articles/779105/Color-Canvas-and-Color-Picker-WPF-Toolkit
         }
 
         #endregion
 
-        //-- 2022 сохранение заметки
-        //-- 2022 сохраняет в RTF но потом открывает белиберду
-        //-- добавить подсказку при наведении мыши и вообще как-то выделить окно редактирования заметки
-        //private void ImgSave_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+
+        #region На будущее для реализации добавления из буфера картинок вместе с текстом
+
+        //private ImageSource ImageFromClipboardDib()
         //{
-        //    //--переименование
-        //    //-- добавить проверку, может это уже rtf
-        //    int c = NotePath.LastIndexOf('\\');
-        //    string path = NotePath.Substring(0, c+1);
-        //    string NotePath2 = path + NoteNameTbx.Text + ".rtf";
-        //    File.Move(NotePath, NotePath2);
-
-        //    TextRange doc = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-        //    FileStream fs = File.Create(NotePath2);
-        //    //using (FileStream fs = File.Create(NotePath))
-        //    //{
-        //        if (System.IO.Path.GetExtension(NotePath2).ToLower() == ".rtf")
-        //        {
-        //            doc.Save(fs, DataFormats.Rtf);
-        //        }
-        //        else if (System.IO.Path.GetExtension(NotePath2).ToLower() == ".txt")
-        //        {
-        //            doc.Save(fs, DataFormats.Text);
-        //        }
-        //        else
-        //        {
-        //            doc.Save(fs, DataFormats.Xaml);
-        //        }
-        //    //}
-        //    //-- обновление заметки в списке заметок
-        //    List<Item> items = new List<Item>();
-        //    items = (List<Item>)NotesLv.ItemsSource;
-        //    foreach (Item itm in items)
-        //    {
-        //        if (itm.Path == NotePath)
-        //        {
-        //            fs.Position = 0;
-        //            byte[] bytes = new byte[fs.Length];
-        //            int numBytesToRead = (int)fs.Length;
-        //            int n = fs.Read(bytes, 0, numBytesToRead);
-
-        //            itm.Name = NoteNameTbx.Text;
-        //            itm.DTimeModified = DateTime.Today; //-- взять время сохранения
-        //            itm.NoteBytes = bytes;
-        //            itm.Fs = fs;
-        //            itm.Path = NotePath2;
-        //            NotePath = NotePath2;
-
-        //            break;
-        //        }
-        //    }
-        //    fs.Close();
+        //    MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;
+        //    BitmapImage bmp = new BitmapImage();
+        //    bmp.BeginInit();
+        //    bmp.StreamSource = ms;
+        //    bmp.EndInit();
+        //    return bmp;
         //}
 
-       
+        //private ImageSource ImageFromClipboardDib()
+        //{
+        //    MemoryStream ms = Clipboard.GetData("DeviceIndependentBitmap") as MemoryStream;
+        //    if (ms != null)
+        //    {
+        //        byte[] dibBuffer = new byte[ms.Length];
+        //        ms.Read(dibBuffer, 0, dibBuffer.Length);
 
+        //        BITMAPINFOHEADER infoHeader =
+        //            BinaryStructConverter.FromByteArray<BITMAPINFOHEADER>(dibBuffer);
 
+        //        int fileHeaderSize = Marshal.SizeOf(typeof(BITMAPFILEHEADER));
+        //        int infoHeaderSize = infoHeader.biSize;
+        //        int fileSize = fileHeaderSize + infoHeader.biSize + infoHeader.biSizeImage;
 
-  
+        //        BITMAPFILEHEADER fileHeader = new BITMAPFILEHEADER();
+        //        fileHeader.bfType = BITMAPFILEHEADER.BM;
+        //        fileHeader.bfSize = fileSize;
+        //        fileHeader.bfReserved1 = 0;
+        //        fileHeader.bfReserved2 = 0;
+        //        fileHeader.bfOffBits = fileHeaderSize + infoHeaderSize + infoHeader.biClrUsed * 4;
+
+        //        byte[] fileHeaderBytes =
+        //            BinaryStructConverter.ToByteArray<BITMAPFILEHEADER>(fileHeader);
+
+        //        MemoryStream msBitmap = new MemoryStream();
+        //        msBitmap.Write(fileHeaderBytes, 0, fileHeaderSize);
+        //        msBitmap.Write(dibBuffer, 0, dibBuffer.Length);
+        //        msBitmap.Seek(0, SeekOrigin.Begin);
+
+        //        return BitmapFrame.Create(msBitmap);
+        //    }
+        //    return null;
+        //}
+
+        //public class BITMAPINFOHEADER
+        //{
+        //    public uint size;
+        //    public int width;
+        //    public int height;
+        //    public ushort biPlanes;
+        //    public ushort biBitCount;
+        //    public uint biCompression;
+        //    public uint biSizeImage;
+        //    public int biXPelsPerMeter;
+        //    public int biYPelsPerMeter;
+        //    public uint biClrUsed;
+        //    public uint biClrImportant;
+        //}
+
+        //[StructLayout(LayoutKind.Sequential, Pack = 2)]
+        //private struct BITMAPFILEHEADER
+        //{
+        //    public static readonly short BM = 0x4d42; // BM
+
+        //    public short bfType;
+        //    public int bfSize;
+        //    public short bfReserved1;
+        //    public short bfReserved2;
+        //    public int bfOffBits;
+        //}
+
+        //[StructLayout(LayoutKind.Sequential)]
+        //private struct BITMAPINFOHEADER
+        //{
+        //    public int biSize;
+        //    public int biWidth;
+        //    public int biHeight;
+        //    public short biPlanes;
+        //    public short biBitCount;
+        //    public int biCompression;
+        //    public int biSizeImage;
+        //    public int biXPelsPerMeter;
+        //    public int biYPelsPerMeter;
+        //    public int biClrUsed;
+        //    public int biClrImportant;
+        //}
+
+        //public static class BinaryStructConverter
+        //{
+        //    public static T FromByteArray<T>(byte[] bytes) where T : struct
+        //    {
+        //        IntPtr ptr = IntPtr.Zero;
+        //        try
+        //        {
+        //            int size = Marshal.SizeOf(typeof(T));
+        //            ptr = Marshal.AllocHGlobal(size);
+        //            Marshal.Copy(bytes, 0, ptr, size);
+        //            object obj = Marshal.PtrToStructure(ptr, typeof(T));
+        //            return (T)obj;
+        //        }
+        //        finally
+        //        {
+        //            if (ptr != IntPtr.Zero)
+        //                Marshal.FreeHGlobal(ptr);
+        //        }
+        //    }
+
+        //    public static byte[] ToByteArray<T>(T obj) where T : struct
+        //    {
+        //        IntPtr ptr = IntPtr.Zero;
+        //        try
+        //        {
+        //            int size = Marshal.SizeOf(typeof(T));
+        //            ptr = Marshal.AllocHGlobal(size);
+        //            Marshal.StructureToPtr(obj, ptr, true);
+        //            byte[] bytes = new byte[size];
+        //            Marshal.Copy(ptr, bytes, 0, size);
+        //            return bytes;
+        //        }
+        //        finally
+        //        {
+        //            if (ptr != IntPtr.Zero)
+        //                Marshal.FreeHGlobal(ptr);
+        //        }
+        //    }
+        //}
+
+        #endregion
+
 
     }
 
 
-    class State
-    {
-        public string Name { get; set; }
-        public string Capital { get; set; }
-
-        public State(string name, string capital)
-        {
-            this.Name = name;
-            this.Capital = capital;
-        }
-
-        public State()
-        { }
-    }
-
-
-
-    public class Team
-    {
-        public string Country { get; set; }
-        public int Place { get; set; }
-        public int Score { get; set; }
-    }
 
 
     //-- 2022 заметка-файл
@@ -869,11 +631,6 @@ namespace MyNotes
         public FileStream Fs { get; set; }
         public byte[] NoteBytes { get; set; }
         public string Path {get; set; }
-
-        //public override string ToString()
-        //{
-        //    return this.Name + ", " + this.Type + " ffffff";
-        //}
     }
 
 }
