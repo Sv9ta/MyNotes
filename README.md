@@ -9,7 +9,7 @@ You can download the
 First you need to select the folder in which the notes are stored
 
 you can take 
-[these Notebooks](https://github.com/Sv9ta/MyNotes/tree/master/Test%20Notebook/NoteBook) to test.
+[these Notebooks](https://github.com/Sv9ta/MyNotes/tree/master/Test%20Notebook) to test.
 
 <img src="screenshots/1.png" alt="open original file" width="30%">
 <img src="screenshots/2.png" alt="open original file" width="70%">
