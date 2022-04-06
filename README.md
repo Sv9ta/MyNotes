@@ -16,8 +16,10 @@ you can take
 
 In the left area is a tree (TreeView) of notebooks.
 Notebooks are directories, notes are files (RTF).
-
-<img src="screenshots/3.png" alt="open original file" width="40%">
+Notebooks with nested notebooks are indicated
+<img src="screenshots/stack.png" alt="open original file">
+Notebooks without nested notebooks are indicated
+<img src="screenshots/notebook2_icon.png" alt="open original file">
 
 <img src="screenshots/4.png" alt="open original file" width="70%">
 <img src="screenshots/5.png" alt="open original file" width="70%">
