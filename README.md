@@ -3,7 +3,7 @@ is an WPF application for viewing, editing, saving, deleting notes in notebooks.
 
 ## Installing
 You can download the 
-[latest release](https://github.com/Sv9ta/WpfMerge/releases/download/v1.0.0/WpfMerge.exe) and run it.
+[latest release](https://github.com/Sv9ta/MyNotes/releases/download/v1.0.0/MyNotes.exe) and run it.
 
 ## Usage
 First you need to select the folder in which the notes are stored
