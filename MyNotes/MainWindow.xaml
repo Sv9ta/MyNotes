@@ -75,8 +75,8 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="170"/>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="auto"/>
             <!--<ColumnDefinition Width="600"/>-->
             <ColumnDefinition Width="*"/>
@@ -116,7 +116,7 @@
                 </StackPanel.Background>
                 <!--<Image Stretch="None" Source=".\Images\notebook2_icon.png" />-->
                 <Image Stretch="None" Source=".\Images\stack_dark_icon.png" />
-                <TextBlock VerticalAlignment="Top" Foreground="#FF5A5C5F" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Записные книжки"/></TextBlock>
+                <TextBlock VerticalAlignment="Top" Foreground="#FF5A5C5F" Margin="4" FontWeight="Bold" FontSize="16"><Run Text="Notebooks"/></TextBlock>
             </StackPanel>
             <TreeView x:Name="trvStructure" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="TreeViewItem_Selected" Margin="2" Background="#FFE9E7ED" BorderBrush="#FF8991A0">
                 <!--<TreeView.Style>
@@ -172,7 +172,7 @@
             <!--2-я горизонтальная панель заметок-->
             <DockPanel LastChildFill="False">
                 <TextBlock x:Name="NotePaneltbl2" DockPanel.Dock="Left"  Height="20" VerticalAlignment="Center" Foreground="#FF3374D1" Margin="0,10,0,0" />
-                <Image Width="24" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" ToolTip="Удалить заметку" DockPanel.Dock="Right" Opacity="0.7">
+                <Image Width="24" Margin="0,0,50,0" MouseLeftButtonUp="ImgDell_MouseLeftButtonUp" ToolTip="delete note" DockPanel.Dock="Right" Opacity="0.7">
                     <Image.Source>
                         <BitmapImage>
                             <!--<BitmapImage.UriSource>.\Images\busket2_icon.png</BitmapImage.UriSource>-->
@@ -191,7 +191,7 @@
                         <ScaleTransform ScaleX="1" ScaleY="1"/>
                     </Image.RenderTransform>
                 </Image>
-                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" ToolTip="Сохранить заметку" DockPanel.Dock="Right" Opacity="0.7">
+                <Image Width="20" Margin="0,0,15,0" MouseLeftButtonUp="ImgSave_MouseLeftButtonUp" ToolTip="save note" DockPanel.Dock="Right" Opacity="0.7">
                     <Image.Source>
                         <BitmapImage>
                             <BitmapImage.UriSource>.\Images\save2.png</BitmapImage.UriSource>
@@ -265,12 +265,12 @@
             </Border>
         </UniformGrid>
 
-        <Button x:Name="buttonOpenFile0" ToolTip="открыть содержимое файла в эту заметку" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Открыть" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
+        <Button x:Name="buttonOpenFile0" ToolTip="open file contents in this note" Width="70" Height="20" Grid.Row="4" Grid.Column="3" Content="Open" Click="buttonOpenFile0_Click" Margin="0,1,10,10" VerticalAlignment="Center"  />
         
         <DockPanel Grid.Row="6" Grid.Column="3">
             <WrapPanel DockPanel.Dock="Top" Margin="3" Height="27" RenderTransformOrigin="0.498,1.148" >
-                <Button Command="ApplicationCommands.Cut" ToolTip="Удалить строки или картинки" Width="60" Content="_Cut"/>
-                <Button Command="ApplicationCommands.Paste" ToolTip="Вставить из буфера текст или картинку" Width="60" Margin="3,0" Content="_Paste"/>
+                <Button Command="ApplicationCommands.Cut" ToolTip="delete lines or pictures" Width="60" Content="_Cut"/>
+                <Button Command="ApplicationCommands.Paste" ToolTip="paste text or image from clipboard" Width="60" Margin="3,0" Content="_Paste"/>
             </WrapPanel>
 
         </DockPanel>

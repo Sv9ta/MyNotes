@@ -92,7 +92,7 @@ namespace MyNotes
                 //-- задаем название блокнота
                 NotebookNameTbl.Text = expandedDir.Name;
                 //-- название блокнота в заметке
-                NotePaneltbl1.Text = "Записная книжка: " + expandedDir.Name;
+                NotePaneltbl1.Text = "Notebook: " + expandedDir.Name;
             }
         }
 
@@ -112,7 +112,7 @@ namespace MyNotes
                 //-- задаем название блокнота
                 NotebookNameTbl.Text = selectedDir.Name;
                 //-- название блокнота в заметке
-                NotePaneltbl1.Text = "Записная книжка: " + selectedDir.Name;
+                NotePaneltbl1.Text = "Notebook: " + selectedDir.Name;
             }
         }
 
@@ -142,14 +142,14 @@ namespace MyNotes
                 NotePaneltbl2.Inlines.Clear();
                 Run rn;
                 rn = new Run();
-                rn.Text = "Создана: ";
+                rn.Text = "Created: ";
                 rn.Foreground = Brushes.Black;
                 NotePaneltbl2.Inlines.Add(rn);
                 rn = new Run();
                 rn.Text = item.DTimeCreate.ToShortDateString() + " " + item.DTimeCreate.ToShortTimeString();
                 NotePaneltbl2.Inlines.Add(rn);
                 rn = new Run();
-                rn.Text = "   Изменена: ";
+                rn.Text = "   Changed: ";
                 rn.Foreground = Brushes.Black;
                 NotePaneltbl2.Inlines.Add(rn);
                 rn = new Run();
