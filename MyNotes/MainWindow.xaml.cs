@@ -620,7 +620,7 @@ namespace MyNotes
 
 
 
-    //-- 2022 заметка-файл
+    //-- заметка-файл
     public class Item
     {
         public string Type { get; set; }

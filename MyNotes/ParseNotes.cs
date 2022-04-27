@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using System.Collections;
-using Microsoft.Win32;
-using System.Globalization;
+
 
 namespace MyNotes
 {
@@ -23,7 +14,7 @@ namespace MyNotes
     {
 
         // Открыть папку с Записными книжками
-        public static string ChooseNotebookFolder()
+        internal static string ChooseNotebookFolder()
         {
             string folderName = null;
 
@@ -81,7 +72,7 @@ namespace MyNotes
 
 
         //-- Раскрытие элемента дерева
-        public static DirectoryInfo TreeViewItemExpanded(TreeViewItem item)
+        internal static DirectoryInfo TreeViewItemExpanded(TreeViewItem item)
         {
             DirectoryInfo expandedDir = null;
 
@@ -107,7 +98,7 @@ namespace MyNotes
 
 
         //-- Возвращает все заметки из выбранной директории списком List<Item>
-        public static List<Item> FillNotes(System.IO.FileInfo[] files, string notebookName)
+        internal static List<Item> FillNotes(System.IO.FileInfo[] files, string notebookName)
         {
             List<Item> items = new List<Item>();
             //--обход всех заметок-файлов в папке
@@ -145,7 +136,7 @@ namespace MyNotes
 
 
         //-- Сохранение заметки
-        public static void SaveNote(string NotePath, string NoteName, TextRange doc, List<Item> ItemsSource)
+        internal static void SaveNote(string NotePath, string NoteName, TextRange doc, List<Item> ItemsSource)
         {
             //--переименование (Название заметки)
             int c = NotePath.LastIndexOf('\\');
